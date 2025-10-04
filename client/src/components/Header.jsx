@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom'
 import { assets } from '../assets/data.js'
 import Navbar from './Navbar.jsx'
 import { useState } from 'react'
+import { UserButton, useClerk } from '@clerk/clerk-react'
+import { useAppContext } from '../context/AppContext.jsx'
+import { ScrollText } from "lucide-react";
+
 
 
 const Header = () => {
   const [menuOpened, setMenuOpened] = useState(false);
 
-  const toggleMenu = () => setMenuOpened((prev) => !prev);
+  const { openSignIn } = useClerk();
+  const { navigate, user } = useAppContext();
 
+
+  const toggleMenu = () => setMenuOpened((prev) => !prev);
 
   return (
     <header className='absolute top-0 left-0 right-0 z-50 bg-white py-3'>
@@ -30,8 +37,8 @@ const Header = () => {
           <Navbar
             setMenuOpened={setMenuOpened}
             containerStyles={`${menuOpened
-                ? "flex item-start flex-col gap-y-8 fixed top-16 right-6 p-5 bg-white shadow-md w-52 z-50"
-                : "hidden lg:flex gap-x-5 xl:gap-x-8 text-sm font-medium bg-gray-100 rounded-full px-3 py-1"
+              ? "flex item-start flex-col gap-y-8 fixed top-16 right-6 p-5 bg-white shadow-md w-52 z-50"
+              : "hidden lg:flex gap-x-5 xl:gap-x-8 text-sm font-medium bg-gray-100 rounded-full px-3 py-1"
               }`}
           />
         </div>
@@ -59,11 +66,33 @@ const Header = () => {
             <label className='absolute bottom-7 right-0 left-0 text-xs font-bold bg-secondary/15 flexCenter rounded-full'>0</label>
           </div>
           {/*User Profile*/}
-          <div className='group relative top-1'>
-            <button className='btn-secondary flexCenter gap-2 rounded-full'>
-              Login
-              <img src={assets.user} alt="" className='invert w-5' />
-            </button>
+          <div className='group'>
+            {user ? (
+              <UserButton
+              appearance={{
+                elements:{
+                  userButtonAvatarBox:{
+                    width:"42px",
+                    height:"42px"
+                  }
+                }
+              }}
+              >
+                <UserButton.MenuItems>
+                  <UserButton.Action
+                    label='My orders'
+                    labelIcon={<ScrollText size={18} strokeWidth={1.5} />}
+                    onClick={() => navigate / '/my-orders'}
+                  />
+                </UserButton.MenuItems>
+
+              </UserButton>
+            ) : (
+              <button onClick={openSignIn} className='btn-secondary flexCenter gap-2 rounded-full'>
+                Login
+                <img src={assets.user} alt="" className='invert w-5' />
+              </button>
+            )}
           </div>
         </div>
       </div>
