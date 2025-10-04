@@ -7,7 +7,7 @@ import { Router } from 'react-router-dom'
 
 function App() {
   return (
-    <main> 
+    <main className='overflow-hidden text-tertiary'> 
       <Header/>
       <Routes>
         <Route path='/' element={<Home/>}/>
