@@ -282,5 +282,6 @@ html, body {
   .bold-13 {
     @apply text-[13px] font-[700];
   }
+  
 
 }
