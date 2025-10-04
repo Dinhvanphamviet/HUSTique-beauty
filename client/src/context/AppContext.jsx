@@ -1,16 +1,30 @@
-import React, { children, createContext, use } from 'react'
+import React, { children, createContext, use, useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '@clerk/clerk-react'
+import { dummyProducts } from '../assets/data'
 
 const AppContext = createContext()
 
 export const AppContextProvider = ({ children }) => {
 
-    const navigate = useNavigate()
-    const {user} =useUser()
+  const [products, setProducts] = useState([])
+  const navigate = useNavigate()
+  const currency = import.meta.env.VITE_CURRENCY
+  const { user } = useUser()
 
-    const value = {navigate, user}
+
+  const fetchProducts = async () => {
+    setProducts(dummyProducts)
+  }
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+
+  const value = { navigate, user, products, currency }
+
 
 
   return (
