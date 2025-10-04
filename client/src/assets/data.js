@@ -35,6 +35,8 @@ import trash from "./trash.svg";
 import hero from "./hero.png";
 import features1 from "../assets/features1.png";
 import features2 from "../assets/features2.png";
+import features3 from "../assets/features3.png";
+import features4 from "../assets/features4.png";
 import userImg from "./user.png";
 import user1 from "./user1.png";
 import user2 from "./user2.png";
@@ -152,6 +154,8 @@ export const assets = {
   hero,
   features1,
   features2,
+  features3,
+  features4,
   uploadIcon,
 };
 
