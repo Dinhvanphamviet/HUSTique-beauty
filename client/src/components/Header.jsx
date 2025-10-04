@@ -26,14 +26,16 @@ const Header = () => {
           </Link>
         </div>
         {/*Navbar*/}
-        <div className='flex-1'>
-          <Navbar 
-          setMenuOpened = {setMenuOpened}
-          containerStyles={`${
-            menuOpened 
-            ? "flex item-start flex-col gap-y-8 fixed top-16 right-6 p-5 bg-rounded-xl shadow-md w-52 z-50" 
-            : "hidden lg:flex gap-x-5 xl:gap-x-8 medium-15 bg-secondary/10 rounded-full p-1"}`} />
+        <div>
+          <Navbar
+            setMenuOpened={setMenuOpened}
+            containerStyles={`${menuOpened
+                ? "flex item-start flex-col gap-y-8 fixed top-16 right-6 p-5 bg-white shadow-md w-52 z-50"
+                : "hidden lg:flex gap-x-5 xl:gap-x-8 text-sm font-medium bg-gray-100 rounded-full px-3 py-1"
+              }`}
+          />
         </div>
+
         {/*Buttons and profile icon*/}
         <div className='flex flex-1 items-center sm:justify-end gap-x-4 sm:gap-x-8'>
           {/*Menu Togggle*/}

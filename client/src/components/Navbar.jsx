@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 
 const Navbar = ({ containerStyles, setMenuOpened }) => {
     const navLinks = [
-        { path: '/', title: 'Home' },
-        { path: '/collection', title: 'Collection' },
+        { path: '/', title: 'Trang chủ' },
+        { path: '/collection', title: 'Bộ sưu tập' },
         { path: '/blog', title: 'Blog' },
         { path: '/contact', title: 'Contact' }
     ]
