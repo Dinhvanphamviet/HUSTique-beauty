@@ -5,6 +5,8 @@ import Collection from './pages/Collection'
 import { Routes, Route } from 'react-router-dom'
 import { Router } from 'react-router-dom'
 import Footer from './components/Footer'
+import Blog from './pages/Blog'
+
 
 function App() {
   return (
@@ -13,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/collection' element={<Collection/>}/>
+        <Route path='/blog' element={<Blog/>}/>
       </Routes>
       <Footer/>
     </main>
