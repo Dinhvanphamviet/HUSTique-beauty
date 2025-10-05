@@ -37,7 +37,7 @@ const Title = ({
       </motion.div>
 
       <motion.p
-        className={`${paraStyles} max-w-lg mt-2 text-[#5F5F5F] leading-relaxed text-sm md:text-base italic`}
+        className={`${paraStyles} max-w-lg mt-2 text-gray-600 leading-relaxed text-[14px] italic`}
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}

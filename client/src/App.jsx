@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Collection from './pages/Collection'
 import { Routes, Route } from 'react-router-dom'
 import { Router } from 'react-router-dom'
+import Footer from './components/Footer'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path='/collection' element={<Collection/>}/>
       </Routes>
+      <Footer/>
     </main>
   )
 }
