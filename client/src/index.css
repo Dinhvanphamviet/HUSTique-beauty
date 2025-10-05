@@ -99,7 +99,7 @@ html, body {
   /* Apply Japanese aesthetic font across typography */
   .h1, .h2, .h3, .h4, .h5,
   p, .regular-*, .medium-*, .bold-* {
-    font-family: "Noto Sans JP", "Inter", sans-serif;
+    font-family: "Noto Sans JP", "Inter", "Roboto",sans-serif;
     letter-spacing: 0.02em;
   }
 

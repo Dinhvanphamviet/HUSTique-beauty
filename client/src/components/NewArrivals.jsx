@@ -38,7 +38,7 @@ const NewArrivals = () => {
           centeredSlides
           loop
           autoplay={{
-            delay: 4000,
+            delay: 2000,
             disableOnInteraction: false,
           }}
           breakpoints={{

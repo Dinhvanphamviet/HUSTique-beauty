@@ -23,13 +23,11 @@ const Header = () => {
       <div className="max-padd-container flexBetween">
         {/* Logo */}
         <div className="flex flex-1">
-          <Link to={"/"} className='flex items-end'>
-            <img
-              src={assets.logoImg}
-              alt="logoImg"
-              className="h-11"
-            />
-            <span className='hidden sm:block bold-24 relative right-0'> HUSTique </span>
+          <Link to={"/"} className='flex items-center gap-2'>
+            <img src={assets.logoImg} alt="logo" className="h-11" />
+            <span className='hidden sm:inline-block text-2xl font-bold'>
+              HUSTique Beauty
+            </span>
           </Link>
         </div>
         {/*Navbar*/}
@@ -69,14 +67,14 @@ const Header = () => {
           <div className='group'>
             {user ? (
               <UserButton
-              appearance={{
-                elements:{
-                  userButtonAvatarBox:{
-                    width:"42px",
-                    height:"42px"
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: {
+                      width: "42px",
+                      height: "42px"
+                    }
                   }
-                }
-              }}
+                }}
               >
                 <UserButton.MenuItems>
                   <UserButton.Action
