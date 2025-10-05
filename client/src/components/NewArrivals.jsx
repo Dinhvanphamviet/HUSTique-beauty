@@ -20,7 +20,7 @@ const NewArrivals = () => {
   if (!newArrivals.length) return null
 
   return (
-    <section className="relative max-padd-container my-24 overflow-hidden">
+    <section className="relative max-padd-container my-12 md:my-0 overflow-hidden">
       <div className="absolute inset-0 bg-[url('/sakura-pattern.svg')] bg-repeat opacity-[0.03] pointer-events-none" />
 
       <div className="fade-in">
