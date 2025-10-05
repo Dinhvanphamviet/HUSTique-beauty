@@ -6,8 +6,8 @@ const Navbar = ({ containerStyles, setMenuOpened }) => {
     const navLinks = [
         { path: '/', title: 'Trang chủ' },
         { path: '/collection', title: 'Bộ sưu tập' },
-        { path: '/blog', title: 'Blog' },
-        { path: '/contact', title: 'Contact' }
+        { path: '/blog', title: 'Chuyện làm đẹp' },
+        { path: '/contact', title: 'Liên hệ' }
     ]
 
     return (
@@ -18,7 +18,7 @@ const Navbar = ({ containerStyles, setMenuOpened }) => {
                     key={link.title}
                     to={link.path}
                     className={({ isActive }) =>
-                        `${isActive ? "active-link" : ""} p-2 px-4 rounded-full capitalize text-sm font-semibold`}>
+                        `${isActive ? "active-link" : ""} p-2.5 px-4 rounded-full capitalize text-sm font-semibold`}>
                     {link.title}
                 </NavLink>
 
