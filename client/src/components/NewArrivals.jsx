@@ -48,7 +48,7 @@ const NewArrivals = () => {
             1350: { slidesPerView: 4 },
           }}
           modules={[Autoplay]}
-          className="min-h-[390px]"
+          className="min-h-[330px]"
         >
           {newArrivals.map((product) => (
             <SwiperSlide key={product._id}>
