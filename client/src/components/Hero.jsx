@@ -4,7 +4,7 @@ import { assets } from '../assets/data.js'
 
 function Hero() {
     return (
-        <section className='max-padd-container font-japanese' style={{ fontFamily: '"Noto Sans JP", "Roboto", sans-serif' }}>
+        <section className='max-padd-container font-japanese' >
             <div className="bg-[url('/src/assets/bg.png')] bg-cover bg-center bg-no-repeat h-[80vh] sm:h-[90vh] w-full mt-18 rounded-2xl relative">
                 <div className='mx-auto max-w-[1440px] px-4 pt-1 sm:pt-8 flex flex-col justify-between h-full'>
 
