@@ -7,6 +7,7 @@ import { Router } from 'react-router-dom'
 import Footer from './components/Footer'
 import Blog from './pages/Blog'
 import ProductDetails from './pages/ProductDetails'
+import Contact from './pages/Contact'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path='/collection' element={<Collection/>}/>
         <Route path='/collection/:productId' element={<ProductDetails/>}/>
         <Route path='/blog' element={<Blog/>}/>
+        <Route path='/contact' element={<Contact/>}/>
       </Routes>
       <Footer/>
     </main>
