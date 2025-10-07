@@ -12,7 +12,7 @@ function Home() {
     <Feature/>
     <NewArrivals/>
     <PopularProducts/>
-    <div className="hidden sm:block max-padd-container mt-28 bg-[url('/src/assets/banner.png')] bg-cover bg-center bg-no-repeat h-[288px]"/>
+    <div className="hidden sm:block max-padd-container mt-28 bg-[url('/src/assets/bannerrr.jpeg')] bg-cover bg-center bg-no-repeat h-[288px]"/>
     <Testimonial/>
     </>
   )
