@@ -93,9 +93,9 @@ const Collection = () => {
 
   return (
     <div className='max-padd-container !px-0 mt-20'>
-      <div className='flex flex-col sm:flex-row gap-8 mb-16'>
+      <div className='flex flex-col sm:flex-row gap-8 mb-16 '>
         {/*Filters Option*/}
-        <div className='min-w-72 bg-primary p-4 pl-6 lg:pl-12 rounded-r-xl'>
+        <div className='min-w-72 bg-[#fffafc] p-4 pl-6 lg:pl-12 rounded-r-xl '>
           <SearchInput />
           <div className='px-4 py-3 mt-2 bg-white rounded-xl'>
             <h5 className='h5 mb-4'> Sắp xếp</h5>

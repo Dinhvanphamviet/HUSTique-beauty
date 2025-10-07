@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Router } from 'react-router-dom'
 import Footer from './components/Footer'
 import Blog from './pages/Blog'
+import ProductDetails from './pages/ProductDetails'
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/collection' element={<Collection/>}/>
+        <Route path='/collection/:productId' element={<ProductDetails/>}/>
         <Route path='/blog' element={<Blog/>}/>
       </Routes>
       <Footer/>
