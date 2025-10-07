@@ -32,7 +32,7 @@ const Item = ({ product }) => {
                     <div className="absolute bottom-2 left-2 right-2 hidden group-hover:block">
                         <button
                             onClick={() => {
-                                navigate(`/products/${product._id}`);
+                                navigate(`/collection/${product._id}`);
                                 scrollTo(0, 0);
                             }}
                             className="bg-pink-100 text-pink-700 text-xs py-1 rounded-full w-full hover:bg-pink-200 transition-colors font-medium"

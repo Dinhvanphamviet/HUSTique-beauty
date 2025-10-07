@@ -87,7 +87,7 @@ const Header = () => {
               </UserButton>
             ) : (
               <button onClick={openSignIn} className='btn-secondary flexCenter gap-2 rounded-full'>
-                Login
+                Đăng nhập
                 <img src={assets.user} alt="" className='invert w-5' />
               </button>
             )}
