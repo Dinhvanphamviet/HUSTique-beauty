@@ -3,7 +3,7 @@ import { assets } from "../assets/data"
 
 const ProductFeatures = () => {
   return (
-    <section className="mt-16 bg-[#fdeef4] rounded-3xl shadow-sm py-12 px-6 lg:px-16">
+    <section className="mt-12 bg-[#fdeef4] rounded-3xl shadow-sm py-12 px-6 lg:px-16">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {/* An Tâm Trải Nghiệm */}
               <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4 bg-white/70 rounded-3xl p-6 shadow-sm hover:bg-white/80 hover:scale-102 hover:-translate-y-1 hover:shadow-xl hover:shadow-pink-200 transition-all duration-300 ease-in-out">

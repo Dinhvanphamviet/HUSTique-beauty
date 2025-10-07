@@ -11,13 +11,14 @@
   --color-gray-50: #7b7b7b;
 }
 
-html, body {
+html,
+body {
   background-color: white;
   color: #000000cc;
   overflow-x: hidden;
   scroll-behavior: smooth;
-  font-family: "Noto Sans JP", "Inter", sans-serif;
-  letter-spacing: 0.02em; 
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.02em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -28,24 +29,24 @@ html, body {
 
 
 @layer components {
-  .btn-white  { 
-    @apply  text-[14px] font-[500] ring-1 ring-slate-900/10 bg-white px-7 py-3 rounded-full cursor-pointer
+  .btn-white {
+    @apply text-[14px] font-[500] ring-1 ring-slate-900/10 bg-white px-7 py-3 rounded-full cursor-pointer
   }
 
-  .btn-dark  { 
-    @apply  text-[14px] font-[500] bg-black/80 text-white px-7 py-3 rounded-full cursor-pointer
-  }
-  
-  .btn-light  { 
-    @apply  text-[14px] font-[500] bg-primary px-7 py-3 rounded-full hover:bg-white transition-all duration-300 cursor-pointer
+  .btn-dark {
+    @apply text-[14px] font-[500] bg-black/80 text-white px-7 py-3 rounded-full cursor-pointer
   }
 
-  .btn-outline  { 
-    @apply  text-[14px] font-[500] ring-1 ring-slate-900/10 px-7 py-3 rounded-full hover:bg-primary transition-all duration-300 cursor-pointer
+  .btn-light {
+    @apply text-[14px] font-[500] bg-primary px-7 py-3 rounded-full hover:bg-white transition-all duration-300 cursor-pointer
   }
 
-  .btn-secondary  { 
-    @apply  text-[14px] font-[500] bg-secondary text-white px-7 py-3 rounded-full transition-all cursor-pointer
+  .btn-outline {
+    @apply text-[14px] font-[500] ring-1 ring-slate-900/10 px-7 py-3 rounded-full hover:bg-primary transition-all duration-300 cursor-pointer
+  }
+
+  .btn-secondary {
+    @apply text-[14px] font-[500] bg-secondary text-white px-7 py-3 rounded-full transition-all cursor-pointer
   }
 
   .max-padd-container {
@@ -70,14 +71,7 @@ html, body {
 
 }
 
-@layer utilities{
-  /* Apply Japanese aesthetic font across typography */
-  .h1, .h2, .h3, .h4, .h5,
-  p, .regular-*, .medium-*, .bold-* {
-    font-family: "Noto Sans JP", "Inter", sans-serif;
-    letter-spacing: 0.02em;
-  }
-
+@layer utilities {
 
   .active-link {
     @apply p-2.5 px-4 rounded-full bg-secondary text-white;
@@ -288,10 +282,10 @@ html, body {
   .bold-14 {
     @apply text-[14px] font-[700];
   }
-  
+
   .bold-13 {
     @apply text-[13px] font-[700];
   }
-  
+
 
 }
