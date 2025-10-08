@@ -4,7 +4,7 @@ import { useAppContext } from '../context/AppContext'
 import { dummyAddress } from '../assets/data'
 
 const CartTotal = () => {
-  const { navigate, user, products, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount } = useAppContext()
+  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount } = useAppContext()
 
   const [address, setAddress] = useState(dummyAddress)
   const [showAddress, setShowAddress] = useState(false)
