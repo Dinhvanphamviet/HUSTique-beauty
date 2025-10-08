@@ -48,12 +48,32 @@ export const AppContextProvider = ({ children }) => {
     return count
   }
 
+  //Update Cart Quantity
+  const updateQuantity = (itemId, size, quantity) => {
+    let cartData = structuredClone(cartItems)
+    cartData[itemId][size] = quantity
+    setCartItems(cartData)
+  }
+
+  // Get Cart Amount
+  const getCartAmount = () => {
+    let total = 0
+    for (const itemId in cartItems) {
+      const product = products.find(p => p._id === itemId)
+      if (!product) continue
+      for (const size in cartItems[itemId]) {
+        total += product.price[size] * cartItems[itemId][size]
+      }
+    }
+    return total
+  }
+
   useEffect(() => {
     fetchProducts()
   }, [])
 
 
-  const value = { navigate, user, products, currency, searchQuery , setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount}
+  const value = { navigate, user, products, currency, searchQuery, setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount}
 
 
 
