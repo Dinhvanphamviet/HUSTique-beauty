@@ -11,12 +11,13 @@ import Contact from './pages/Contact'
 import Cart from './pages/Cart'
 import AddressForm from './pages/AddressForm'
 import MyOrders from './pages/MyOrders'
-
+import {Toaster} from "react-hot-toast"
 
 function App() {
   return (
     <main className='overflow-hidden text-tertiary'> 
       <Header/>
+      <Toaster position='bottom-right'/>
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/collection' element={<Collection/>}/>

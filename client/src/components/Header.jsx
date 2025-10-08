@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 import { assets } from '../assets/data.js'
 import Navbar from './Navbar.jsx'
 import { useState } from 'react'
-import { UserButton, useClerk } from '@clerk/clerk-react'
+import { UserButton, useClerk} from '@clerk/clerk-react'
 import { useAppContext } from '../context/AppContext.jsx'
 import { ScrollText } from "lucide-react";
+
 
 
 
@@ -13,7 +14,7 @@ const Header = () => {
   const [menuOpened, setMenuOpened] = useState(false);
 
   const { openSignIn } = useClerk();
-  const { navigate, user } = useAppContext();
+  const { navigate, user, getCartCount } = useAppContext();
 
 
   const toggleMenu = () => setMenuOpened((prev) => !prev);
@@ -64,9 +65,11 @@ const Header = () => {
                 }`} />
           </div>
           {/*Cart button*/}
-          <div className='relative cursor-pointer'>
+          <div onClick={() => navigate('/cart')} className='relative cursor-pointer'>
             <img src={assets.cartAdded} alt="" className='min-w-7' />
-            <label className='absolute bottom-7 right-0 left-0 text-xs font-bold bg-secondary/15 flexCenter rounded-full'>0</label>
+            <label className='absolute bottom-7 right-0 left-0 text-xs font-bold bg-secondary/15 flexCenter rounded-full'>
+            {getCartCount()}
+            </label>
           </div>
           {/*User Profile*/}
           <div className='group'>
