@@ -67,7 +67,7 @@ const CartTotal = () => {
           <p className='bold-18'>{currency}{getCartAmount() === 0? "0.00" : getCartAmount()+ delivery_charges+(getCartAmount()*2)/100}</p>
         </div>
       </div>
-      <button class="btn-dark w-full mt-8 !rounded-md">
+      <button class="btn-secondary w-full mt-8 !rounded-md">
             Tiến hành đặt hàng
       </button>
     </div>
