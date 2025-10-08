@@ -7,7 +7,7 @@ import { useAppContext } from '../context/AppContext'
 import { assets } from '../assets/data'
 
 const ProductDetails = () => {
-  const { products, currency } = useAppContext()
+  const { products, currency, addToCart} = useAppContext()
   const [image, setImage] = useState(null)
   const [size, setSize] = useState(null)
   const { productId } = useParams()
@@ -99,7 +99,7 @@ const ProductDetails = () => {
 
             {/* Buttons */}
             <div className="flex items-center gap-x-4">
-              <button className="bg-[#ffb6c1] hover:bg-[#ff9eb3] transition-all text-white font-semibold rounded-full sm:w-1/2 flexCenter gap-x-2 py-2 shadow-md hover:shadow-pink-200">
+              <button onClick={() => addToCart(product._id,size)} className="bg-[#ffb6c1] hover:bg-[#ff9eb3] transition-all text-white font-semibold rounded-full sm:w-1/2 flexCenter gap-x-2 py-2 shadow-md hover:shadow-pink-200">
                 Thêm vào giỏ hàng
                 <img src={assets.cartAdd} alt="" width={19} />
               </button>
