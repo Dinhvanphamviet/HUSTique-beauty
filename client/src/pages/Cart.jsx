@@ -6,7 +6,7 @@ import { assets } from '../assets/data'
 
 const Cart = () => {
 
-  const { navigate, products, currency, cartItems } = useAppContext()
+  const { navigate, products, currency, cartItems, updateQuantity } = useAppContext()
   const [cartData, setCartData] = useState([])
 
   useEffect(() => {
@@ -24,14 +24,19 @@ const Cart = () => {
       }
       setCartData(tempData)
     }
-  }, products, cartItems)
+  }, [products, cartItems])
 
   const increment = (id, size) => {
+    const currentQuantity = cartItems[id][size]
+    updateQuantity(id, size, currentQuantity + 1)
 
   }
 
   const decrement = (id, size) => {
-
+    const currentQuantity = cartItems[id][size]
+    if (currentQuantity > 1) {
+      updateQuantity(id, size, currentQuantity - 1)
+    }
   }
 
   return products && cartItems ? (
@@ -39,11 +44,11 @@ const Cart = () => {
       <div className='flex flex-col xl:flex-row gap-20 xl:gap-28'>
         {/*Left Side*/}
         <div className='flex flex-[2] flex-col gap-2 text-[95%]'>
-          <Title title1={"Cart"} title2={"Overview"} titleStyles={"pb-5"} />
-          <div className='grid grid-cols-[6fr_2fr_11fr] font-medium bg-white p-2 rounded-xl'>
-            <h5 className='h5 text-left'> Product Details</h5>
-            <h5 className='h5 text-center'> Subtotal</h5>
-            <h5 className='h5 text-center'> Action</h5>
+          <Title title1={"Giỏ hàng"} title2={"Tổng quan"} titleStyles={"pb-5"} />
+          <div className="grid grid-cols-[6fr_2fr_1fr] font-medium bg-white p-2 rounded-xl">
+            <h5 className='h5 text-left'> Chi tiết sản phẩm</h5>
+            <h5 className='h5 text-center'> Tạm tính</h5>
+            <h5 className='h5 text-center'> Thao tác</h5>
           </div>
           {cartData.map((item, i) => {
             const product = products.find((product) => product._id === item._id)
@@ -59,16 +64,16 @@ const Cart = () => {
                     <div className='bold-14 flexStart gap-2 mb-1'>Size: <p>{item.size}</p></div>
                     <div className='flexBetween'>
                       <div className='flex items-center ring-1 ring-slate-900/15 rounded-full overflow-hidden bg-primary'>
-                        <button onClick={()=>decrement(item._id,item.size)} className='p-1.5 bg-secondary text-white rounded-full shadow-md cursor-point'> <img src={assets.minus} alt="" width={11} className='invert' /> </button>
+                        <button onClick={() => decrement(item._id, item.size)} className='p-1.5 bg-secondary text-white rounded-full shadow-md cursor-point'> <img src={assets.minus} alt="" width={11} className='invert' /> </button>
                         <p className='px-2'>{quantity}</p>
-                        <button onClick={()=>increment(item._id,item.size)} className='p-1.5 bg-secondary text-white rounded-full shadow-md cursor-point'> <img src={assets.plus} alt="" width={11} className='invert' /> </button>
+                        <button onClick={() => increment(item._id, item.size)} className='p-1.5 bg-secondary text-white rounded-full shadow-md cursor-point'> <img src={assets.plus} alt="" width={11} className='invert' /> </button>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className='text-center bold-16'>
                   {currency}{product.price[item.size] * quantity}.00</div>
-                <button className='cursor-pointer mx-auto'><img src={assets.cartRemove} alt="" width={22} /></button>
+                <button onClick={() => updateQuantity(item._id, item.size, 0)} className='cursor-pointer mx-auto'><img src={assets.cartRemove} alt="" width={22} /></button>
               </div>
             )
           })}
