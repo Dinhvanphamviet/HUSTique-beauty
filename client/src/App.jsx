@@ -27,8 +27,6 @@ function App() {
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/address-form' element={<AddressForm/>}/>
         <Route path='/my-orders' element={<MyOrders/>}/>
-
-
       </Routes>
       <Footer/>
     </main>
