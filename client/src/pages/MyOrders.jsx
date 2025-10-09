@@ -35,14 +35,25 @@ const MyOrders = () => {
                   <h5 className='h5 uppercase line-clamp-1'>{item.product.title}</h5>
                   <div>
                     <div className='flex items-center gap-x-2'>
-                      <h5>Price:</h5>
+                      <h5 className='medium-14'>Gái:</h5>
                       <p>{currency}{item.product.price[item.size]}</p>
+                    </div>
+                    <div className='flex items-center gap-x-2'>
+                      <h5 className='medium-14'>Số lượng:</h5>
+                      <p>{item.quantity}</p>
+                    </div>
+                    <div className='flex items-center gap-x-2'>
+                      <h5 className='medium-14'>Size:</h5>
+                      <p>{item.size}</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           ))}
+          {/* Order Summary*/}
+
+
         </div>
       ))}
     </div>
