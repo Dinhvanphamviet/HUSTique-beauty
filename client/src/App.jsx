@@ -12,6 +12,9 @@ import Cart from './pages/Cart'
 import AddressForm from './pages/AddressForm'
 import MyOrders from './pages/MyOrders'
 import {Toaster} from "react-hot-toast"
+import Dashboard from './pages/owner/Dashboard'
+import AddProduct from './pages/owner/AddProduct'
+import ListProduct from './pages/owner/ListProduct'
 
 function App() {
   return (
@@ -27,6 +30,11 @@ function App() {
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/address-form' element={<AddressForm/>}/>
         <Route path='/my-orders' element={<MyOrders/>}/>
+        <Route path='/' element={<Dashboard/>}/>
+        <Route path='/owner/list-product' element={<ListProduct/>}/>
+        <Route path='/owner/add-product' element={<AddProduct/>}/>
+        
+
       </Routes>
       <Footer/>
     </main>
