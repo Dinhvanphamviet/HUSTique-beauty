@@ -14,7 +14,7 @@ const Header = () => {
   const [menuOpened, setMenuOpened] = useState(false);
 
   const { openSignIn } = useClerk();
-  const { navigate, user, getCartCount } = useAppContext();
+  const { navigate, user, getCartCount, isOwner } = useAppContext();
 
 
   const toggleMenu = () => setMenuOpened((prev) => !prev);
@@ -45,9 +45,11 @@ const Header = () => {
         {/*Buttons and profile icon*/}
         <div className='flex flex-1 items-center sm:justify-end gap-x-4 sm:gap-x-8'>
           <div>
-            <button className='btn-outline px-2 py-1 text-xs font-semibold'>
+            {isOwner && (
+              <button onClick={()=> navigate('/owner')} className='btn-outline px-2 py-1 text-xs font-semibold'>
               Dashboard
             </button>
+            )}
           </div>
           {/*Menu Togggle*/}
           <div className="relative lg:hidden w-7 h-6">

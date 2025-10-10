@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import Header from './components/Header'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
@@ -15,11 +15,15 @@ import {Toaster} from "react-hot-toast"
 import Dashboard from './pages/owner/Dashboard'
 import AddProduct from './pages/owner/AddProduct'
 import ListProduct from './pages/owner/ListProduct'
-
+import Sidebar from './components/owner/Sidebar'
+import { useLocation } from 'react-router-dom'
 function App() {
+  const location = useLocation()
+  const isOwnerPath = location.pathname.includes('/owner')
+
   return (
     <main className='overflow-hidden text-tertiary'> 
-      <Header/>
+      {!isOwnerPath && <Header/>}
       <Toaster position='bottom-right'/>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -30,13 +34,13 @@ function App() {
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/address-form' element={<AddressForm/>}/>
         <Route path='/my-orders' element={<MyOrders/>}/>
-        <Route path='/' element={<Dashboard/>}/>
+        <Route index element={<Dashboard/>}/>
+        <Route path='/owner' element={<Sidebar/>}/>
         <Route path='/owner/list-product' element={<ListProduct/>}/>
         <Route path='/owner/add-product' element={<AddProduct/>}/>
         
-
       </Routes>
-      <Footer/>
+      {!isOwnerPath && <Footer/>}
     </main>
   )
 }
