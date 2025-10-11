@@ -11,7 +11,7 @@ import Contact from './pages/Contact'
 import Cart from './pages/Cart'
 import AddressForm from './pages/AddressForm'
 import MyOrders from './pages/MyOrders'
-import {Toaster} from "react-hot-toast"
+import { Toaster } from "react-hot-toast"
 import Dashboard from './pages/owner/Dashboard'
 import AddProduct from './pages/owner/AddProduct'
 import ListProduct from './pages/owner/ListProduct'
@@ -22,25 +22,27 @@ function App() {
   const isOwnerPath = location.pathname.includes('/owner')
 
   return (
-    <main className='overflow-hidden text-tertiary'> 
-      {!isOwnerPath && <Header/>}
-      <Toaster position='bottom-right'/>
+    <main className='overflow-hidden text-tertiary'>
+      {!isOwnerPath && <Header />}
+      <Toaster position='bottom-right' />
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/collection' element={<Collection/>}/>
-        <Route path='/collection/:productId' element={<ProductDetails/>}/>
-        <Route path='/blog' element={<Blog/>}/>
-        <Route path='/contact' element={<Contact/>}/>
-        <Route path='/cart' element={<Cart/>}/>
-        <Route path='/address-form' element={<AddressForm/>}/>
-        <Route path='/my-orders' element={<MyOrders/>}/>
-        <Route index element={<Dashboard/>}/>
-        <Route path='/owner' element={<Sidebar/>}/>
-        <Route path='/owner/list-product' element={<ListProduct/>}/>
-        <Route path='/owner/add-product' element={<AddProduct/>}/>
-        
+        <Route path='/' element={<Home />} />
+        <Route path='/collection' element={<Collection />} />
+        <Route path='/collection/:productId' element={<ProductDetails />} />
+        <Route path='/blog' element={<Blog />} />
+        <Route path='/contact' element={<Contact />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/address-form' element={<AddressForm />} />
+        <Route path='/my-orders' element={<MyOrders />} />
+        <Route path="/owner" element={<Sidebar />}>
+          <Route index element={<Dashboard />} />
+          <Route path="add-product" element={<AddProduct />} />
+          <Route path="list-product" element={<ListProduct />} />
+        </Route>
+
+
       </Routes>
-      {!isOwnerPath && <Footer/>}
+      {!isOwnerPath && <Footer />}
     </main>
   )
 }
