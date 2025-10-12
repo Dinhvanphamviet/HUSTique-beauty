@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+import connectDB from './config/mongodb.js'
+
+await connectDB() //Connect to MongoDB
 
 const app = express() //Init express app
 app.use(cors()) //Enable Cross-Origin Resource Sharing
