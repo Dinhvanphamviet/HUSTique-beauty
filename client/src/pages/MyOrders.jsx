@@ -35,7 +35,7 @@ const MyOrders = () => {
                   <h5 className='h5 uppercase line-clamp-1'>{item.product.title}</h5>
                   <div className='flex flex-wrap gap-3 max-sm:gap-y-1 mt-1'>
                     <div className='flex items-center gap-x-2'>
-                      <h5 className='medium-14'>Gái:</h5>
+                      <h5 className='medium-14'>Giá:</h5>
                       <p>{currency}{item.product.price[item.size]}</p>
                     </div>
                     <div className='flex items-center gap-x-2'>
@@ -52,7 +52,7 @@ const MyOrders = () => {
             </div>
           ))}
           {/* Order Summary*/}
-          <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-t border-gray-300 pt-3">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-t border-gray-300 pt-3">
             <div className='flex flex-col gap-2'>
               <div className='flex items-center gap-x-2'>
                 <h5 className='medium-14'>Size:</h5>
