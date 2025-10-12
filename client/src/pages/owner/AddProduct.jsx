@@ -26,9 +26,28 @@ const AddProduct =() => {
 
   const allCagegories = ["Chăm sóc tóc", "Chăm sóc cơ thể", "Chăm sóc da mặt"]
   const allTypes = ["Dầu gội", "Sữa tắm", "Sữa rửa mặt", "Kem dưỡng ẩm", "Mặt nạ", "Serum", "Xịt khoáng"]
+  const addSizePrice = () => {
+    if (!newSize || !newPrice){
+      toast.error("Vui lòng nhập đầy đủ thông tin size và giá")
+      return
+    }
+    if(sizePrices.some((sp) => sp.size === newSize)){
+      toast.error("Kích thước đã tồn tại")
+      return
+    }
+    setSizePrices([...sizePrices, {size: newSize, price: parseFloat(newPrice)}])
+    setNewSize("")
+    setNewPrice("") 
+  }
+
+  const removeSizePrice = (size) => {
+    setSizePrices(sizePrices.filter((sp) => sp.size !== size))
+  }
 
   return (
-    <div>AddProduct</div>
+    <div>
+      
+    </div>
   )
 }
 
