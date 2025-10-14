@@ -7,6 +7,7 @@ import clerkWebhooks from "./controllers/ClerkWebhooks.js";
 import userRouter from './routes/userRoute.js';
 import connectCloudinary from "./config/cloudinary.js";
 import productRouter from "./routes/productRoute.js";
+import addressRouter from "./routes/addressRoute.js";
 
 
 await connectDB() //Connect to MongoDB
@@ -25,6 +26,7 @@ app.use("/api/clerk", clerkWebhooks)
 //Define API Routes
 app.use("/api/user", userRouter)
 app.use("/api/products", productRouter)
+app.use("/api/address", addressRouter)
 
 
 //Routes Endpoint to check API Status
