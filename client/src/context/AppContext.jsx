@@ -1,7 +1,7 @@
 import React, { children, createContext, use, useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useUser } from '@clerk/clerk-react'
+import { useUser, useAuth } from '@clerk/clerk-react'
 import toast from "react-hot-toast"
 import { dummyProducts } from '../assets/data'
 import axios from 'axios'
@@ -16,15 +16,34 @@ export const AppContextProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [cartItems, setCartItems] = useState({})
   const [method, setMethod] = useState("COD")
-  const [isOwner, setIsOwner] = useState(true)
+  const [isOwner, setIsOwner] = useState(false)
   const navigate = useNavigate()
   const currency = import.meta.env.VITE_CURRENCY
   const delivery_charges = 10;
 
-
-
   //Clerk
   const { user } = useUser()
+  const { getToken } = useAuth()
+
+
+  // Get the user Profile
+  const getUser = async () => {
+    try {
+      const { data } = await axios.get('/api/user', { headers: { Authorization: `Bearer ${await getToken()}` } })
+      if (data.success){
+        setIsOwner(data.role === 'owner')
+        setCartItems(data.cartData || {})
+      } else {
+        setTimeout(() =>{
+          getUser()
+        }, 5000);
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+
 
   //fetch all products
   const fetchProducts = async () => {
@@ -71,6 +90,12 @@ export const AppContextProvider = ({ children }) => {
     }
     return total
   }
+
+  useEffect(() => {
+    if (user){
+      getUser()
+    }
+  }, [user])
 
   useEffect(() => {
     fetchProducts()
