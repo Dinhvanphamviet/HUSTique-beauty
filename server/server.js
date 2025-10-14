@@ -8,6 +8,7 @@ import userRouter from './routes/userRoute.js';
 import connectCloudinary from "./config/cloudinary.js";
 import productRouter from "./routes/productRoute.js";
 import addressRouter from "./routes/addressRoute.js";
+import cartRouter from "./routes/cartRoute.js";
 
 
 await connectDB() //Connect to MongoDB
@@ -27,6 +28,7 @@ app.use("/api/clerk", clerkWebhooks)
 app.use("/api/user", userRouter)
 app.use("/api/products", productRouter)
 app.use("/api/address", addressRouter)
+app.use("/api/cart", cartRouter)
 
 
 //Routes Endpoint to check API Status
