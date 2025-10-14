@@ -5,9 +5,12 @@ import connectDB from './config/mongodb.js'
 import { clerkMiddleware } from '@clerk/express'
 import clerkWebhooks from "./controllers/ClerkWebhooks.js";
 import userRouter from './routes/userRoute.js';
+import connectCloudinary from "./config/cloudinary.js";
+import productRouter from "./routes/productRoute.js";
 
 
 await connectDB() //Connect to MongoDB
+await connectCloudinary() //Setup Cloudinary
 
 const app = express() //Init express app
 app.use(cors()) //Enable Cross-Origin Resource Sharing
@@ -21,6 +24,7 @@ app.use("/api/clerk", clerkWebhooks)
 
 //Define API Routes
 app.use("/api/user", userRouter)
+app.use("/api/products", productRouter)
 
 
 //Routes Endpoint to check API Status
