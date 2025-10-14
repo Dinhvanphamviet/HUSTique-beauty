@@ -1,9 +1,9 @@
 import React from 'react'
 import Hero from '../components/Hero'
-import Feature from '../context/Feature'
 import NewArrivals from '../components/NewArrivals'
 import PopularProducts from '../components/PopularProducts'
 import Testimonial from '../components/Testimonial'
+import Feature from '../components/Feature'
 
 function Home() {
   return (
