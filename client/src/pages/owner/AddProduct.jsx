@@ -82,8 +82,8 @@ const AddProduct = () => {
         category: inputs.category,
         type: inputs.type,
         popular: inputs.popular,
-        price: inputs.price,
-        sizes: inputs.sizes,
+        price: prices,
+        sizes: sizes,
       }
 
       formData.append("productData", JSON.stringify(productData))
@@ -170,7 +170,7 @@ const AddProduct = () => {
         <div className='flex gap-2 mt-2'>
           {Object.keys(images).map((key) => (
             <label key={key} htmlFor={`productImage${key}`} className='ring-1 ring-slate-900/10 overflow-hidden rounded-lg'>
-              <input onChange={(e) => setImages({ ...images, [key]: e.target.files[0] })} type="file" accept='image/* id={`productImage${key}`}' hidden />
+              <input onChange={(e) => setImages({ ...images, [key]: e.target.files[0] })} type="file" accept='image/*' id={`productImage${key}`} hidden />
               <div className='h-16 w-22 bg-white flexCenter'>
                 <img src={images[key] ? URL.createObjectURL(images[key]) : assets.uploadIcon} alt="" className='w-17 overflow-hidden object-contain' />
               </div>
