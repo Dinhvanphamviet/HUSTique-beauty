@@ -102,7 +102,7 @@ export const AppContextProvider = ({ children }) => {
   }, [])
 
 
-  const value = { navigate, user, products, currency, searchQuery, setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, isOwner, setIsOwner, fetchProducts }
+  const value = { navigate, user, products, currency, searchQuery, setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, isOwner, setIsOwner, fetchProducts, axios, getToken }
 
 
 
