@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
     category: {type:String, required:true},
     type: {type:String, required:true},
     popular: {type:Boolean, default:false},
-    inStock: {type:Boolean, default:false},
+    inStock: {type:Boolean, default:true},
 }, {timestamps: true})
 
 const Product = mongoose.model("Product", productSchema)
