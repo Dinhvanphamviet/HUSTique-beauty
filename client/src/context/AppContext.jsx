@@ -3,7 +3,6 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUser, useAuth } from '@clerk/clerk-react'
 import toast from "react-hot-toast"
-import { dummyProducts } from '../assets/data'
 import axios from 'axios'
 
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
@@ -47,7 +46,17 @@ export const AppContextProvider = ({ children }) => {
 
   //fetch all products
   const fetchProducts = async () => {
-    setProducts(dummyProducts)
+    try {
+      const { data } = await axios.get('/api/products')
+      if (data.success) {
+        setProducts(data.products)
+      } else{
+        toast.error(data.message)
+      }
+      
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
 
