@@ -29,11 +29,11 @@ export const AppContextProvider = ({ children }) => {
   const getUser = async () => {
     try {
       const { data } = await axios.get('/api/user', { headers: { Authorization: `Bearer ${await getToken()}` } })
-      if (data.success){
+      if (data.success) {
         setIsOwner(data.role === 'owner')
         setCartItems(data.cartData || {})
       } else {
-        setTimeout(() =>{
+        setTimeout(() => {
           getUser()
         }, 5000);
       }
@@ -50,10 +50,10 @@ export const AppContextProvider = ({ children }) => {
       const { data } = await axios.get('/api/products')
       if (data.success) {
         setProducts(data.products)
-      } else{
+      } else {
         toast.error(data.message)
       }
-      
+
     } catch (error) {
       toast.error(error.message)
     }
@@ -61,12 +61,25 @@ export const AppContextProvider = ({ children }) => {
 
 
   // Add product to cart
-  const addToCart = (itemId, size) => {
+  const addToCart = async (itemId, size) => {
     if (!size) return toast.error("Hãy chọn size trước")
     let cartData = structuredClone(cartItems)
     cartData[itemId] = cartData[itemId] || {}
     cartData[itemId][size] = (cartData[itemId][size] || 0) + 1
     setCartItems(cartData)
+
+    if (user) {
+      try {
+        const { data } = await axios.post("/api/cart/add", {itemId, size}, { headers: { Authorization: `Bearer ${await getToken()}` } });
+        if (data.success) {
+          toast.success(data.message)
+        } else {
+          toast.error(data.message)
+        }
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
   }
 
   // Get cart count
@@ -101,7 +114,7 @@ export const AppContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (user){
+    if (user) {
       getUser()
     }
   }, [user])
