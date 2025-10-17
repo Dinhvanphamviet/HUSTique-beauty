@@ -36,7 +36,7 @@ const CartTotal = () => {
           </div>
         </div>
         <hr className='border-gray-300 mt-5' />
-        <div my-6>
+        <div className='my-6'>
           <h4 className='h4 mb-5'>Phương thức thanh toán</h4>
           <div className='flex gap-3'>
             <div onClick={() => setMethod("COD")} className={`${method === "COD" ? "btn-secondary":"btn-outline"} !py-1 text-xs cursor-pointer text-center`}>
@@ -67,7 +67,7 @@ const CartTotal = () => {
           <p className='bold-18'>{currency}{getCartAmount() === 0? "0.00" : getCartAmount()+ delivery_charges+(getCartAmount()*2)/100}</p>
         </div>
       </div>
-      <button class="btn-secondary w-full mt-8 !rounded-md">
+      <button className="btn-secondary w-full mt-8 !rounded-md">
             Tiến hành đặt hàng
       </button>
     </div>
