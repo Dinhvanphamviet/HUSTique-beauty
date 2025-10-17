@@ -6,7 +6,7 @@ export const addToCart = async (req, res) => {
         const {itemId, size} = req.body;
         const {userId} = req.auth();
         const userData = await User.findById(userId);
-        const cartData = await userData.cartData;
+        const cartData = await userData.cartData || {};
 
         if(cartData[itemId]){
             if(cartData[itemId][size]){
@@ -35,11 +35,16 @@ export const updateCart = async (req, res)=>{
         const {userId} = req.auth()
 
         const userData = await User.findById(userId)
-        const cartData = await userData.cartData
+        const cartData = await userData.cartData || {}
 
         if(quantity <= 0){
-            delete cartData[itemId]
+            delete cartData[itemId][size]
+
+            if(Object.keys(cartData[itemId]).length === 0){
+                delete cartData[itemId]
+            }
         }else{
+            cartData[itemId] = cartData[itemId] || {}
             cartData[itemId][size] = quantity
         }
 
