@@ -70,7 +70,7 @@ export const AppContextProvider = ({ children }) => {
 
     if (user) {
       try {
-        const { data } = await axios.post("/api/cart/add", {itemId, size}, { headers: { Authorization: `Bearer ${await getToken()}` } });
+        const { data } = await axios.post("/api/cart/add", { itemId, size }, { headers: { Authorization: `Bearer ${await getToken()}` } });
         if (data.success) {
           toast.success(data.message)
         } else {
@@ -94,10 +94,23 @@ export const AppContextProvider = ({ children }) => {
   }
 
   //Update Cart Quantity
-  const updateQuantity = (itemId, size, quantity) => {
+  const updateQuantity = async (itemId, size, quantity) => {
     let cartData = structuredClone(cartItems)
     cartData[itemId][size] = quantity
-    setCartItems(cartData)
+    setCartItems(cartData);
+
+    if (user) {
+      try {
+        const { data } = await axios.post("/api/cart/update", { itemId, size, quantity }, { headers: { Authorization: `Bearer ${await getToken()}` } });
+        if (data.success) {
+          toast.success(data.message)
+        } else {
+          toast.error(data.message)
+        }
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
   }
 
   // Get Cart Amount
