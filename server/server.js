@@ -27,7 +27,7 @@ app.use("/api/clerk", clerkWebhooks)
 //Define API Routes
 app.use("/api/user", userRouter)
 app.use("/api/products", productRouter)
-app.use("/api/address", addressRouter)
+app.use("/api/addresses", addressRouter)
 app.use("/api/cart", cartRouter)
 
 
