@@ -1,7 +1,27 @@
-import React from 'react'
-import { blogs } from '../assets/data'
+import React, { useEffect, useState } from "react";
+import { useAppContext } from "../context/AppContext";
+import MarkdownPreview from "@uiw/react-markdown-preview";
 
 const Blog = () => {
+  const { axios } = useAppContext();
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const { data } = await axios.get("/api/blogs");
+        if (data.success) {
+          setBlogs(data.blogs);
+        } else {
+          console.error("Không tải được blog:", data.message);
+        }
+      } catch (err) {
+        console.error("Lỗi khi tải blog:", err);
+      }
+    };
+    fetchBlogs();
+  }, []);
+
   return (
     <div className="pb-28 pt-20 font-sans text-gray-800">
       <div className="max-padd-container">
@@ -10,11 +30,11 @@ const Blog = () => {
             <div key={index} className="group">
               {/* Card */}
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
-                
+
                 {/* Image */}
                 <div className="relative overflow-hidden h-48 w-full flex-shrink-0">
                   <img
-                    src={blog.image}
+                    src={blog.image || blog.imageUrl}
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
@@ -23,21 +43,40 @@ const Blog = () => {
 
                 {/* Info */}
                 <div className="p-4 flex flex-col flex-1">
-                  <p className="text-xs text-pink-400 font-medium mb-1">{blog.category}</p>
-                  <h5 className="text-md font-semibold text-gray-900 mb-2 line-clamp-2">{blog.title}</h5>
-                  <p className="text-gray-600 text-sm line-clamp-3 flex-1">{blog.description}</p>
-                  <button className="mt-3 text-pink-500 font-medium underline text-sm hover:text-pink-600 transition-colors">
-                    Continue reading
+                  <p className="text-xs text-pink-400 font-medium mb-1">
+                    {blog.category}
+                  </p>
+                  <h5 className="text-md font-semibold text-gray-900 mb-2 line-clamp-2">
+                    {blog.title}
+                  </h5>
+
+                  <div className="text-gray-700 text-sm flex-1 prose max-w-none">
+                    <div
+                      className="!bg-transparent !text-gray-700 line-clamp-2"
+                    >
+                      <MarkdownPreview
+                        source={blog.description}
+                        className="!bg-transparent !text-gray-700 !p-0 !m-0"
+                      />
+                    </div>
+                  </div>
+
+
+                  {/* Nút xem chi tiết */}
+                  <button
+                    onClick={() => (window.location.href = `/blog/${blog._id}`)}
+                    className="mt-3 text-pink-500 font-medium underline text-sm hover:text-pink-600 transition-colors"
+                  >
+                    Xem thêm
                   </button>
                 </div>
-
               </div>
             </div>
           ))}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Blog
+export default Blog;

@@ -10,6 +10,7 @@ import productRouter from "./routes/productRoute.js";
 import addressRouter from "./routes/addressRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
+import blogRouter from "./routes/blogRoute.js";
 
 
 await connectDB() //Connect to MongoDB
@@ -31,6 +32,8 @@ app.use("/api/products", productRouter)
 app.use("/api/addresses", addressRouter)
 app.use("/api/cart", cartRouter)
 app.use("/api/orders", orderRouter)
+app.use("/api/blogs", blogRouter);
+
 
 
 //Routes Endpoint to check API Status
