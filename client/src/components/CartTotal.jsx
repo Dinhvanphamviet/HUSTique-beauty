@@ -1,14 +1,40 @@
 import React, { use, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAppContext } from '../context/AppContext'
-import { dummyAddress } from '../assets/data'
+import { useEffect } from 'react'
 
 const CartTotal = () => {
-  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount } = useAppContext()
+  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, axios, user, getToken } = useAppContext()
 
-  const [address, setAddress] = useState(dummyAddress)
+  const [addresses, setAddresses] = useState([])
   const [showAddress, setShowAddress] = useState(false)
-  const [selectAddress, setSelectAddress] = useState(dummyAddress[0])
+  const [selectAddress, setSelectAddress] = useState(null)
+
+
+  const getAddress = async () => {
+    if (user) {
+      try {
+        const { data } = await axios.get("/api/addresses", { headers: { Authorization: `Bearer ${await getToken()}` } });
+        if (data.success) {
+          setAddresses(data.addresses);
+          if (data.addresses.length > 0) {
+            setSelectAddress(data.addresses[0]);
+          }
+        } else {
+          toast.error(data.message)
+        }
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if(user) {
+      getAddress()
+    }
+  }, [user])
+  
 
   return (
     <div>
@@ -25,7 +51,7 @@ const CartTotal = () => {
             <button onClick={() => setShowAddress(!showAddress)} className='text-secondary medium-14 hover:underline cursor-pointer'> Thay đổi</button>
             {showAddress && (
               <div className='absolute top-10 py-1 bg-white ring-1 ring-slate-900/10 text-sm w-full'>
-                {address.map((address, index) => (
+                {addresses.map((address, index) => (
                   <p key={index} onClick={() => { setSelectAddress(address); setShowAddress(false)}} className='p-2 cursor-pointer hover:bg-gray-100 medium-14'>
                     {address.street}, {address.city}, {address.state}, {address.country}
                   </p>
