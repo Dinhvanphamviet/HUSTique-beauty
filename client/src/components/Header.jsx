@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { assets } from '../assets/data.js'
 import Navbar from './Navbar.jsx'
 import { useState } from 'react'
-import { UserButton, useClerk} from '@clerk/clerk-react'
+import { UserButton, useClerk } from '@clerk/clerk-react'
 import { useAppContext } from '../context/AppContext.jsx'
 import { ScrollText } from "lucide-react";
 
@@ -46,9 +46,9 @@ const Header = () => {
         <div className='flex flex-1 items-center sm:justify-end gap-x-4 sm:gap-x-8'>
           <div>
             {isOwner && (
-              <button onClick={()=> navigate('/owner')} className='btn-outline px-2 py-1 text-xs font-semibold'>
-              Dashboard
-            </button>
+              <button onClick={() => navigate('/owner')} className='btn-outline px-2 py-1 text-xs font-semibold'>
+                Dashboard
+              </button>
             )}
           </div>
           {/*Menu Togggle*/}
@@ -70,7 +70,7 @@ const Header = () => {
           <div onClick={() => navigate('/cart')} className='relative cursor-pointer'>
             <img src={assets.cartAdded} alt="" className='min-w-7' />
             <label className='absolute bottom-7 right-0 left-0 text-xs font-bold bg-secondary/15 flexCenter rounded-full'>
-            {getCartCount()}
+              {getCartCount()}
             </label>
           </div>
           {/*User Profile*/}
@@ -90,7 +90,7 @@ const Header = () => {
                   <UserButton.Action
                     label='My orders'
                     labelIcon={<ScrollText size={18} strokeWidth={1.5} />}
-                    onClick={() => navigate / '/my-orders'}
+                    onClick={() => navigate('/my-orders')}
                   />
                 </UserButton.MenuItems>
 
