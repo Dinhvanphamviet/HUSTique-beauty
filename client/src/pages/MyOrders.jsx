@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import Title from '../components/Title'
 import { useAppContext } from '../context/AppContext'
-import { dummyOrdersData } from '../assets/data'
 
 
 const MyOrders = () => {
-  const { currency, user } = useAppContext()
+  const { currency, user, getToken, axios} = useAppContext()
   const [orders, setOrders] = useState([])
 
-  const loadOrdersData = () => {
-    setOrders(dummyOrdersData)
+  const loadOrdersData = async () => {
+    if (!user) return
+    try {
+      const { data } = await axios.post("/api/orders/userorders", {}, { headers: { Authorization: `Bearer ${await getToken()}` } });
+      if(data.success){
+        setOrders(data.orders.reverse())
+
+      }
+
+    } catch (error) {
+      console.log(error)
+
+    }
   };
 
   useEffect(() => {
@@ -84,7 +94,7 @@ const MyOrders = () => {
                 <h5 className='medium-14'>Trạng thái:</h5>
                 <div className='flex items-center gap-1'>
                   <span className='min-w-2 h-2 rounded-full bg-green-500' />
-                <p>{order.status}</p>
+                  <p>{order.status}</p>
                 </div>
               </div>
               <button className='btn-secondary !py-1 !text-xs rounded-sm'>Theo dõi đơn hàng </button>

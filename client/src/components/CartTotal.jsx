@@ -1,10 +1,10 @@
-import React, { use, useState } from 'react'
+import React, {useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAppContext } from '../context/AppContext'
 import { useEffect } from 'react'
 
 const CartTotal = () => {
-  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, axios, user, getToken } = useAppContext()
+  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, axios, user, getToken, products} = useAppContext()
 
   const [addresses, setAddresses] = useState([])
   const [showAddress, setShowAddress] = useState(false)
@@ -27,7 +27,52 @@ const CartTotal = () => {
         toast.error(error.message)
       }
     }
+  };
+
+  const placeOrder = async () => {
+    try {
+      if(!selectAddress){
+        return toast.error("Please select an address")
+      }
+
+      let orderItems = []
+      for (const itemId in cartItems) {
+        for (const size in cartItems[itemId]) {
+          if(cartItems[itemId][size] > 0){
+            const itemInfo = structuredClone(products.find((product) => product._id === itemId))
+            if(itemInfo){
+              itemInfo.size = size;
+              itemInfo.quantity = cartItems[itemId][size]
+              orderItems.push(itemInfo)
+            }
+          }
+        }
+      }
+
+      //Convert orderItems to required format
+      let items = orderItems.map((item) => ({
+        product: item._id,
+        quantity: item.quantity,
+        size: item.size,
+      }))
+      
+      //Place Order COD
+      if(method === "COD"){
+        const {data} = await axios.post("/api/orders/cod", {items, address: selectAddress._id}, {headers: {Authorization: `Bearer ${await getToken()}`}})
+        if(data.success){
+          toast.success(data.message)
+          setCartItems({})
+          navigate('/my-orders')
+        } else {
+          toast.error(data.message)
+        }
+      } 
+      
+    } catch (error) {
+      
+    }
   }
+
 
   useEffect(() => {
     if(user) {
@@ -93,7 +138,7 @@ const CartTotal = () => {
           <p className='bold-18'>{currency}{getCartAmount() === 0? "0.00" : getCartAmount()+ delivery_charges+(getCartAmount()*2)/100}</p>
         </div>
       </div>
-      <button className="btn-secondary w-full mt-8 !rounded-md">
+      <button onClick={placeOrder} className="btn-secondary w-full mt-8 !rounded-md">
             Tiến hành đặt hàng
       </button>
     </div>

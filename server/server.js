@@ -9,6 +9,7 @@ import connectCloudinary from "./config/cloudinary.js";
 import productRouter from "./routes/productRoute.js";
 import addressRouter from "./routes/addressRoute.js";
 import cartRouter from "./routes/cartRoute.js";
+import orderRouter from "./routes/orderRoute.js";
 
 
 await connectDB() //Connect to MongoDB
@@ -29,6 +30,7 @@ app.use("/api/user", userRouter)
 app.use("/api/products", productRouter)
 app.use("/api/addresses", addressRouter)
 app.use("/api/cart", cartRouter)
+app.use("/api/orders", orderRouter)
 
 
 //Routes Endpoint to check API Status

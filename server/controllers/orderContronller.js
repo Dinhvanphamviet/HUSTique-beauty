@@ -64,9 +64,9 @@ export const placeOrderCOD = async (req, res) => {
 
 export const placeOrderStripe = async (req, res) => {
     try {
-        
+
     } catch (error) {
-        
+
     }
 }
 
@@ -74,18 +74,26 @@ export const placeOrderStripe = async (req, res) => {
 //All Orders data of user
 export const userOrders = async (req, res) => {
     try {
-        
+        const { userId } = req.auth()
+        const orders = await Order.find({ userId, $or: [{ paymentMethod: "COD" }, { isPaid: true }] }).populate("items.product address").sort({ createdAt: -1 })
+
+        res.json({ success: true, orders })
     } catch (error) {
-        
+        res.json({ success: false, message: error.message })
     }
 }
 
 //All Orders data of admin
 export const allOrders = async (req, res) => {
     try {
-        
+        const orders = await Order.find({ $or: [{ paymentMethod: "COD" }, { isPaid: true }] }).populate("items.product address").sort({ createdAt: -1 })
+
+        const totalOrders = orders.length
+        const totalRevenue = orders.reduce((acc, o) => acc + (o.isPaid ? o.amount : 0), 0)
+
+        res.json({ success: true, dashboardData: { totalOrders, totalRevenue, orders } })
     } catch (error) {
-        
+        res.json({ success: false, message: error.message })
     }
 }
 
@@ -93,8 +101,14 @@ export const allOrders = async (req, res) => {
 //Update Order Status for admin [POST '/update-status']
 export const updateStatus = async (req, res) => {
     try {
-        
+        const { orderId, status } = req.body
+        await Order.findByIdAndUpdate(orderId, { status })
+
+        res.json({ success: true, message: "Order status updated" })
+
     } catch (error) {
-        
+        console.log(error.message)
+        res.json({ success: false, message: error.message })
+
     }
 }
