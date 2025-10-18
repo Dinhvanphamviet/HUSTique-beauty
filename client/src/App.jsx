@@ -16,7 +16,10 @@ import Dashboard from './pages/owner/Dashboard'
 import AddProduct from './pages/owner/AddProduct'
 import ListProduct from './pages/owner/ListProduct'
 import Sidebar from './components/owner/Sidebar'
+import ManageBlogs from './pages/owner/ManageBlogs'
+import BlogDetail from './pages/BlogDetail'
 import { useLocation } from 'react-router-dom'
+
 function App() {
   const location = useLocation()
   const isOwnerPath = location.pathname.includes('/owner')
@@ -30,6 +33,7 @@ function App() {
         <Route path='/collection' element={<Collection />} />
         <Route path='/collection/:productId' element={<ProductDetails />} />
         <Route path='/blog' element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/cart' element={<Cart />} />
         <Route path='/address-form' element={<AddressForm />} />
@@ -38,6 +42,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="list-product" element={<ListProduct />} />
+          <Route path="manage-blogs" element={<ManageBlogs />} />
         </Route>
 
 

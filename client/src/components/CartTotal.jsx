@@ -88,7 +88,7 @@ const CartTotal = () => {
       {/*Payment & Address*/}
       <div className='mb-5'>
         <div className='my-5'>
-          <h4 className='h4 mb-5'>Giao hàng đến đâu?</h4>
+          <h4 className='h4 mb-5'>Địa chỉ nhận hàng</h4>
           <div className='relative flex justify-between items-start mt-2'>
             <p>{selectAddress
               ? `${selectAddress.street}, ${selectAddress.city}, ${selectAddress.state}, ${selectAddress.country}`
@@ -114,7 +114,7 @@ const CartTotal = () => {
               Thanh toán khi nhận hàng
             </div>
             <div onClick={() => setMethod("Stripe")} className={`${method === "Stripe" ? "btn-secondary":"btn-outline"} !py-1 text-xs cursor-pointer text-center`}>
-              Thanh toán qua Stripe
+              Thanh toán Online
             </div>
           </div>
         </div>

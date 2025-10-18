@@ -12,6 +12,8 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.50.0",
     "@tailwindcss/vite": "^4.1.14",
+    "@uiw/react-markdown-preview": "^5.1.5",
+    "@uiw/react-md-editor": "^4.0.8",
     "axios": "^1.12.2",
     "lucide-react": "^0.544.0",
     "motion": "^12.23.22",
