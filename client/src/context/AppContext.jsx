@@ -16,6 +16,8 @@ export const AppContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({})
   const [method, setMethod] = useState("COD")
   const [isOwner, setIsOwner] = useState(false)
+  const [blogs, setBlogs] = useState([])
+  const getBlogById = (id) => blogs.find(b => b._id === id)
   const navigate = useNavigate()
   const currency = import.meta.env.VITE_CURRENCY
   const delivery_charges = 10;
@@ -137,7 +139,8 @@ export const AppContextProvider = ({ children }) => {
   }, [])
 
 
-  const value = { navigate, user, products, currency, searchQuery, setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, isOwner, setIsOwner, fetchProducts, axios, getToken }
+  const value = { navigate, user, products, currency, searchQuery, setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, isOwner, setIsOwner, fetchProducts, axios, getToken,  blogs,
+  setBlogs, getBlogById }
 
 
 
