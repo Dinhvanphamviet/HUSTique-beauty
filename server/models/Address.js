@@ -11,7 +11,7 @@ const addressSchema = mongoose.Schema({
     country: {type: String, required:true},
     zipcode: {type: String, required:true},
     phone: {type: String, required:true},
-}, {timeStamps: true})
+}, {timestamps: true})
 
 const Address = mongoose.model("Address", addressSchema)
 
