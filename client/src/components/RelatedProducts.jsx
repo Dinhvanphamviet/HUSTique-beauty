@@ -44,6 +44,8 @@ const RelatedProducts = ({product, productId}) => {
             600: { slidesPerView: 2 },
             1022: { slidesPerView: 3 },
             1350: { slidesPerView: 4 },
+            1650: { slidesPerView: 5 },
+            2000: { slidesPerView: 6 },
           }}
           modules={[Autoplay]}
           className="min-h-[330px]"

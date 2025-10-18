@@ -13,7 +13,7 @@ const Collection = () => {
   const [filteredProducts, setFilteredProducts] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [availableTypes, setAvailableTypes] = useState([])
-  const itemsPerPage = 8
+  const itemsPerPage = 10
 
   //Predefined Categories list
   const allCategories = useMemo(() => ["Chăm sóc tóc", "Chăm sóc cơ thể", "Chăm sóc da mặt"], []);
@@ -132,7 +132,7 @@ const Collection = () => {
         </div>
         {/*Right Side - Filter Products*/}
         <div className='max-sm:px-10 sm:pr-10'>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6'>
             {getPaginatedProducts().length > 0 ? (
               getPaginatedProducts().map((product) => (
                 <Item product={product} key={product._id} />
