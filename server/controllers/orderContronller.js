@@ -2,6 +2,7 @@ import transporter from "../config/nodemailer.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
+import Stripe from "stripe";
 
 // Global variables for payment
 const currency = "usd"
@@ -99,7 +100,7 @@ export const placeOrderCOD = async (req, res) => {
                 <tr>
                     <td style="padding: 8px;"><strong>Tổng số tiền:</strong></td>
                     <td style="padding: 8px; color: #16a34a; font-weight: bold;">
-                    ${(process.env.CURRENCY || "₫")}${populatedOrder.amount}
+                    ${(process.env.CURRENCY || "$")}${populatedOrder.amount}
                     </td>
                 </tr>
                 </table>
@@ -148,8 +149,106 @@ export const placeOrderCOD = async (req, res) => {
 
 export const placeOrderStripe = async (req, res) => {
     try {
+        const { items, address } = req.body
+        const { userId } = req.auth()
+        const { origin } = req.headers
+
+
+        if (!items || items.length === 0) {
+            return res.json({ success: false, message: "Please add Product first" })
+        }
+
+
+        let subtotal = 0
+        let productData = []
+
+        // calculate subtotal and prepare productData
+
+        for (const item of items) {
+            const product = await Product.findById(item.product);
+            if (!product) {
+                return res.json({ success: false, message: "Product not found" })
+            }
+
+            const unitPrice = product.price[item.size] //pick correct size price
+            if (!unitPrice) {
+                return res.json({ success: false, message: "Invalid size selected" })
+            }
+
+            subtotal += unitPrice * item.quantity
+
+            productData.push({
+                name: product.title, //Ensure this matches the products schema
+                price: unitPrice,
+                quantity: item.quantity,
+            })
+        }
+
+        //caltulate total amount by adding delivery charges and tax
+
+        const taxAmount = subtotal * taxPercentage
+        const totalAmount = subtotal + taxAmount + delivery_charges
+
+        const order = await Order.create({
+            userId,
+            items,
+            amount: totalAmount,
+            address,
+            paymentMethod: "stripe",
+        })
+
+        const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+        let line_items = productData.map(((item) => ({
+            price_data: {
+                currency: currency,
+                product_data: {
+                    name: item.name, //use name to match productData
+                },
+                unit_amount: Math.round(item.price * 100),
+            },
+            quantity: item.quantity,
+        })))
+
+
+        //Tax
+        line_items.push({
+            price_data: {
+                currency,
+                product_data: { name: "Tax (2%)" },
+                unit_amount: Math.round(taxAmount * 100),
+            },
+            quantity: 1,
+        })
+
+        //Delivery charges
+        line_items.push({
+            price_data: {
+                currency,
+                product_data: { name: "Delivery Charges" },
+                unit_amount: Math.round(delivery_charges * 100),
+            },
+            quantity: 1,
+        })
+
+
+        // Create Stripe checkout session
+        const session = await stripeInstance.checkout.sessions.create({
+            line_items,
+            mode: "payment",
+            success_url: `${origin}/processing/my-orders`,
+            cancel_url: `${origin}/cart`,
+            metadata: {
+                orderId: order._id.toString(),
+                userId,
+            }
+        })
+
+        return res.json({ success: true, url: session.url })
 
     } catch (error) {
+        console.log("Stripe Error:", error.message)
+        res.json({success: false, message: error.message})
 
     }
 }
