@@ -8,8 +8,8 @@ import { request, response } from "express";
 
 export const stripeWebhooks = async (request, response) =>{
     //Stripe Gateway initialize
-    const stripeInstance = new Stripe(process.env.STRIEPE_SECRET_KEY)
-    const sig = request.headers["Stripe-signature"]
+    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
+    const sig = request.headers["stripe-signature"]
 
     let event;
 
@@ -25,7 +25,7 @@ export const stripeWebhooks = async (request, response) =>{
     }
 
     //Handle the event
-    if(event.type === "payment_intent.successed"){
+    if (event.type === "payment_intent.succeeded"){
         const paymentIntent = event.data.object;
         const paymentIntentId = paymentIntent.id
 
