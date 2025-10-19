@@ -25,6 +25,7 @@ app.use(cors()) //Enable Cross-Origin Resource Sharing
 app.post('/api/stripe', express.raw({type: "application/json"}), stripeWebhooks)
 
 app.use(express.json()) //Enable JSON body parsing
+
 app.use(clerkMiddleware()) //Enable Clerk middleware for authentication
 
 //API to listen Clerk Webhooks

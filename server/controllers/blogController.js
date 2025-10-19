@@ -1,11 +1,4 @@
 import Blog from "../models/Blog.js";
-import { v2 as cloudinary } from "cloudinary";
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 // 🧩 Lấy tất cả blogs
 export const getBlogs = async (req, res) => {
@@ -17,16 +10,13 @@ export const getBlogs = async (req, res) => {
   }
 };
 
-// 🧩 Tạo blog mới
+// 🧩 Tạo blog mới (upload ảnh trực tiếp lên Cloudinary)
 export const createBlog = async (req, res) => {
   try {
-    const { title, description, category } = req.body; 
-    let imageUrl = "";
+    const { title, description, category } = req.body;
 
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      imageUrl = result.secure_url;
-    }
+    // Multer-Cloudinary đã upload sẵn, đường dẫn Cloudinary nằm ở req.file.path
+    const imageUrl = req.file?.path || "";
 
     const newBlog = new Blog({
       title,
@@ -39,6 +29,7 @@ export const createBlog = async (req, res) => {
 
     res.status(201).json({ success: true, blog: newBlog });
   } catch (err) {
+    console.error("Lỗi tạo blog:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -50,14 +41,19 @@ export const updateBlog = async (req, res) => {
     const { title, description, category } = req.body;
     const updateData = { title, description, category };
 
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      updateData.imageUrl = result.secure_url;
+    // Nếu có ảnh mới thì multer-Cloudinary đã upload sẵn, chỉ cần lấy URL
+    if (req.file?.path) {
+      updateData.imageUrl = req.file.path;
     }
 
     const updated = await Blog.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updated)
+      return res.status(404).json({ success: false, message: "Không tìm thấy blog" });
+
     res.status(200).json({ success: true, blog: updated });
   } catch (err) {
+    console.error("Lỗi cập nhật blog:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -77,12 +73,15 @@ export const deleteBlog = async (req, res) => {
   }
 };
 
-// Lấy blog cụ thể
+// 🧩 Lấy blog cụ thể
 export const getBlogById = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog)
-      return res.status(404).json({ success: false, message: "Không tìm thấy blog" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy blog" });
+
     res.status(200).json({ success: true, blog });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
