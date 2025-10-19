@@ -11,6 +11,7 @@ import addressRouter from "./routes/addressRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import blogRouter from "./routes/blogRoute.js";
+import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
 
 
 await connectDB() //Connect to MongoDB
@@ -18,6 +19,10 @@ await connectCloudinary() //Setup Cloudinary
 
 const app = express() //Init express app
 app.use(cors()) //Enable Cross-Origin Resource Sharing
+
+
+//API to listen to stripe webhooks
+app.post('/api/stripe', express.raw({type: "application/json"}), stripeWebhooks)
 
 app.use(express.json()) //Enable JSON body parsing
 app.use(clerkMiddleware()) //Enable Clerk middleware for authentication

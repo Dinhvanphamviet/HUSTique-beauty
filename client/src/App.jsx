@@ -19,6 +19,7 @@ import Sidebar from './components/owner/Sidebar'
 import ManageBlogs from './pages/owner/ManageBlogs'
 import BlogDetail from './pages/BlogDetail'
 import { useLocation } from 'react-router-dom'
+import Processing from './pages/Processing'
 
 function App() {
   const location = useLocation()
@@ -38,6 +39,7 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/address-form' element={<AddressForm />} />
         <Route path='/my-orders' element={<MyOrders />} />
+        <Route path='/processing/:nextUrl' element={<Processing />} />
         <Route path="/owner" element={<Sidebar />}>
           <Route index element={<Dashboard />} />
           <Route path="add-product" element={<AddProduct />} />

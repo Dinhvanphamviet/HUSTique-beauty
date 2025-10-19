@@ -1,10 +1,11 @@
-import React, {useState } from 'react'
+import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAppContext } from '../context/AppContext'
 import { useEffect } from 'react'
+import { data } from 'react-router-dom'
 
 const CartTotal = () => {
-  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, axios, user, getToken, products} = useAppContext()
+  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, axios, user, getToken, products } = useAppContext()
 
   const [addresses, setAddresses] = useState([])
   const [showAddress, setShowAddress] = useState(false)
@@ -31,16 +32,16 @@ const CartTotal = () => {
 
   const placeOrder = async () => {
     try {
-      if(!selectAddress){
+      if (!selectAddress) {
         return toast.error("Please select an address")
       }
 
       let orderItems = []
       for (const itemId in cartItems) {
         for (const size in cartItems[itemId]) {
-          if(cartItems[itemId][size] > 0){
+          if (cartItems[itemId][size] > 0) {
             const itemInfo = structuredClone(products.find((product) => product._id === itemId))
-            if(itemInfo){
+            if (itemInfo) {
               itemInfo.size = size;
               itemInfo.quantity = cartItems[itemId][size]
               orderItems.push(itemInfo)
@@ -55,31 +56,39 @@ const CartTotal = () => {
         quantity: item.quantity,
         size: item.size,
       }))
-      
+
       //Place Order COD
-      if(method === "COD"){
-        const {data} = await axios.post("/api/orders/cod", {items, address: selectAddress._id}, {headers: {Authorization: `Bearer ${await getToken()}`}})
-        if(data.success){
+      if (method === "COD") {
+        const { data } = await axios.post("/api/orders/cod", { items, address: selectAddress._id }, { headers: { Authorization: `Bearer ${await getToken()}` } })
+        if (data.success) {
           toast.success(data.message)
           setCartItems({})
           navigate('/my-orders')
         } else {
           toast.error(data.message)
         }
-      } 
-      
+      } else {
+        const { data } = await axios.post("/api/orders/stripe", { items, address: selectAddress._id }, { headers: { Authorization: `Bearer ${await getToken()}` } });
+        if(data.success){
+          window.location.replace(data.url)
+        } else{
+          toast.error(data.message)
+        }
+
+      }
+
     } catch (error) {
-      
+      toast.error(error.message)
     }
-  }
+  };
 
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       getAddress()
     }
   }, [user])
-  
+
 
   return (
     <div>
@@ -97,7 +106,7 @@ const CartTotal = () => {
             {showAddress && (
               <div className='absolute top-10 py-1 bg-white ring-1 ring-slate-900/10 text-sm w-full'>
                 {addresses.map((address, index) => (
-                  <p key={index} onClick={() => { setSelectAddress(address); setShowAddress(false)}} className='p-2 cursor-pointer hover:bg-gray-100 medium-14'>
+                  <p key={index} onClick={() => { setSelectAddress(address); setShowAddress(false) }} className='p-2 cursor-pointer hover:bg-gray-100 medium-14'>
                     {address.street}, {address.city}, {address.state}, {address.country}
                   </p>
                 ))}
@@ -110,10 +119,10 @@ const CartTotal = () => {
         <div className='my-6'>
           <h4 className='h4 mb-5'>Phương thức thanh toán</h4>
           <div className='flex gap-3'>
-            <div onClick={() => setMethod("COD")} className={`${method === "COD" ? "btn-secondary":"btn-outline"} !py-1 text-xs cursor-pointer text-center`}>
+            <div onClick={() => setMethod("COD")} className={`${method === "COD" ? "btn-secondary" : "btn-outline"} !py-1 text-xs cursor-pointer text-center`}>
               Thanh toán khi nhận hàng
             </div>
-            <div onClick={() => setMethod("Stripe")} className={`${method === "Stripe" ? "btn-secondary":"btn-outline"} !py-1 text-xs cursor-pointer text-center`}>
+            <div onClick={() => setMethod("Stripe")} className={`${method === "Stripe" ? "btn-secondary" : "btn-outline"} !py-1 text-xs cursor-pointer text-center`}>
               Thanh toán Online
             </div>
           </div>
@@ -127,19 +136,19 @@ const CartTotal = () => {
         </div>
         <div className='flex justify-between'>
           <h5 className='h5'> Phí vận chuyển</h5>
-          <p className='font-bold'>{currency}{getCartAmount() === 0? "0.00" : `${delivery_charges}.00`}</p>
+          <p className='font-bold'>{currency}{getCartAmount() === 0 ? "0.00" : `${delivery_charges}.00`}</p>
         </div>
         <div className='flex justify-between'>
           <h5 className='h5'> Thuế(2%)</h5>
-          <p className='font-bold'>{currency}{(getCartAmount()*2)/100}</p>
+          <p className='font-bold'>{currency}{(getCartAmount() * 2) / 100}</p>
         </div>
         <div className='flex justify-between'>
           <h4 className='h4'> Tổng thanh toán:</h4>
-          <p className='bold-18'>{currency}{getCartAmount() === 0? "0.00" : getCartAmount()+ delivery_charges+(getCartAmount()*2)/100}</p>
+          <p className='bold-18'>{currency}{getCartAmount() === 0 ? "0.00" : getCartAmount() + delivery_charges + (getCartAmount() * 2) / 100}</p>
         </div>
       </div>
       <button onClick={placeOrder} className="btn-secondary w-full mt-8 !rounded-md">
-            Tiến hành đặt hàng
+        Tiến hành đặt hàng
       </button>
     </div>
   )
