@@ -19,6 +19,7 @@
     "express": "^5.1.0",
     "mongoose": "^8.19.1",
     "multer": "^2.0.2",
+    "nodemailer": "^7.0.9",
     "stripe": "^19.1.0",
     "svix": "^1.77.0"
   },
