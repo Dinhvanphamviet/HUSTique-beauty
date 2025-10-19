@@ -100,7 +100,7 @@ const CartTotal = () => {
           <h4 className='h4 mb-5'>Địa chỉ nhận hàng</h4>
           <div className='relative flex justify-between items-start mt-2'>
             <p>{selectAddress
-              ? `${selectAddress.street}, ${selectAddress.city}, ${selectAddress.state}, ${selectAddress.country}`
+              ? `${selectAddress.street}, ${selectAddress.country},${selectAddress.state}, ${selectAddress.city}`
               : "No address found"} </p>
             <button onClick={() => setShowAddress(!showAddress)} className='text-secondary medium-14 hover:underline cursor-pointer'> Thay đổi</button>
             {showAddress && (
