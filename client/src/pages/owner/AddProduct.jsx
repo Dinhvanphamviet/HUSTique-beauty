@@ -164,7 +164,7 @@ const AddProduct = () => {
           </div>
 
           <div>
-            <h5 className='h5'>Loại mỹ phẩm</h5>
+            <h5 className='h5'>Loại sản phẩm</h5>
             <select
               onChange={(e) => setInputs({ ...inputs, type: e.target.value })}
               value={inputs.type}
