@@ -24,11 +24,11 @@ const ListProduct = () => {
     <div className='px-2 sm:px-6 py-12 m-2 h-[97vh] bg-primary overflow-y-scroll lg:w-11/12 rounded-xl'>
       <div className='flex flex-col gap-2 lg:w-11/12'>
         <div className='grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr] items-center py-4 px-2 bg-secondary text-white bold-14 sm:bold-15 mb-1 rounded-xl'>
-          <h5>Image</h5>
-          <h5>Title</h5>
-          <h5>Category</h5>
-          <h5>Price</h5>
-          <h5>InStock</h5>
+          <h5>Hình ảnh</h5>
+          <h5>Tên sản phẩm</h5>
+          <h5>Danh mục sản phẩm</h5>
+          <h5>Giá</h5>
+          <h5>Tồn kho</h5>
         </div>
         {/* Product List */}
         {products.map((product) => (
@@ -36,7 +36,7 @@ const ListProduct = () => {
             <img src={product.images[0]} alt="" className='w-12 bg-primary rounded' />
             <h5 className="text-sm font-semibold">{product.title}</h5>
             <p className="text-sm font-semibold">{product.category}</p>
-            <div className="text-sm font-semibold">From {currency}{product.price[product.sizes[0]]}</div>
+            <div className="text-sm font-semibold">Chỉ từ {currency}{product.price[product.sizes[0]]}</div>
             <div>
               <label className='relative inline-flex items-center cursor-pointer text-gray-900 gap-3'>
                 <input onClick={()=>toggleStock(product._id, !product.inStock)} type="checkbox" className='sr-only peer' defaultChecked={product.inStock} />
