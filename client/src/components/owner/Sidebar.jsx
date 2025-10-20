@@ -11,22 +11,22 @@ const Sidebar = () => {
   const navItems = [
     {
       path: "/owner/",
-      label: "Dashboard",
+      label: "Trang chủ",
       icon: <FaTachometerAlt />,
     },
     {
       path: "/owner/add-product",
-      label: "Add Product",
+      label: "Thêm sản phẩm",
       icon: <FaPlusSquare />,
     },
     {
       path: "/owner/list-product",
-      label: "List Product",
+      label: "Danh sách sản phẩm",
       icon: <FaListUl />,
     },
     {
       path: "/owner/manage-blogs",
-      label: "Manage Blogs",
+      label: "Quản lý Blogs",
       icon: <FaBlog />,
     },
   ];
