@@ -4,7 +4,7 @@ This is a full-stack MERN stack (MongoDB, Express, React, Node.js) e-commerce we
 
 ## Introduction
 
-HUSTique Beauty is an e-commerce platform that allows users to view, search, and order cosmetic products. The project also includes an admin panel for managing products, orders, and blog posts.
+HUSTique Beauty is an e-commerce platform that allows users to view, search, and order cosmetic products. The project also includes an admin dashboard for managing products, orders, and blog posts.
 
 ## Key Features
 
