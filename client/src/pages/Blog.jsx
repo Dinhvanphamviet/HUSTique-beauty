@@ -42,8 +42,12 @@ const Blog = () => {
                 />
               ))
             : blogs.map((blog) => (
-                <div key={blog._id} className="group">
-                  <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+                <div
+                  key={blog._id}
+                  onClick={() => navigate(`/blog/${blog._id}`)}
+                  className="group cursor-pointer"
+                >
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full hover:-translate-y-1">
                     {/* Image */}
                     <div className="relative overflow-hidden h-48 w-full flex-shrink-0">
                       <img
@@ -71,14 +75,6 @@ const Blog = () => {
                           />
                         </div>
                       </div>
-
-                      {/* Nút xem chi tiết */}
-                      <button
-                        onClick={() => navigate(`/blog/${blog._id}`)}
-                        className="mt-3 text-pink-500 font-medium underline text-sm hover:text-pink-600 transition-colors"
-                      >
-                        Xem thêm
-                      </button>
                     </div>
                   </div>
                 </div>
