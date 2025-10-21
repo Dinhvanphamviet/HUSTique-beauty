@@ -113,6 +113,7 @@ HUSTique Beauty is an e-commerce platform that allows users to view, search, and
     ```env
     VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
     VITE_API_URL=http://localhost:4000
+    VITE_CURRENCY=$
     ```
 4.  Run the client:
     ```bash
