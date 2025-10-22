@@ -33,7 +33,7 @@ const CartTotal = () => {
   const placeOrder = async () => {
     try {
       if (!selectAddress) {
-        return toast.error("Please select an address")
+        return toast.error("Vui lòng chọn địa chỉ")
       }
 
       let orderItems = []
