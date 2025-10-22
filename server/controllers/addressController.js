@@ -24,3 +24,22 @@ export const getAddress = async (req, res) => {
         res.json({success:false, message:error.message})
     }
 }
+
+// Delete Address [DELETE: '/:id']
+export const deleteAddress = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { userId } = req.auth()
+
+    const address = await Address.findOne({ _id: id, userId })
+    if (!address) {
+      return res.json({ success: false, message: "Không tìm thấy địa chỉ hoặc bạn không có quyền xóa" })
+    }
+
+    await Address.findByIdAndDelete(id)
+    res.json({ success: true, message: "Đã xóa địa chỉ thành công" })
+  } catch (error) {
+    console.log(error.message)
+    res.json({ success: false, message: error.message })
+  }
+}
