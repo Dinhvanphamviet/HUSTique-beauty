@@ -1,6 +1,6 @@
 import Blog from "../models/Blog.js";
 
-// 🧩 Lấy tất cả blogs
+// Lấy tất cả blogs
 export const getBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find().sort({ createdAt: -1 });
@@ -10,7 +10,7 @@ export const getBlogs = async (req, res) => {
   }
 };
 
-// 🧩 Tạo blog mới (upload ảnh trực tiếp lên Cloudinary)
+// Tạo blog mới (upload ảnh trực tiếp lên Cloudinary)
 export const createBlog = async (req, res) => {
   try {
     const { title, description, category } = req.body;
@@ -34,7 +34,7 @@ export const createBlog = async (req, res) => {
   }
 };
 
-// 🧩 Cập nhật blog
+// Cập nhật blog
 export const updateBlog = async (req, res) => {
   try {
     const { id } = req.params;
@@ -58,7 +58,7 @@ export const updateBlog = async (req, res) => {
   }
 };
 
-// 🧩 Xóa blog
+// Xóa blog
 export const deleteBlog = async (req, res) => {
   try {
     const deleted = await Blog.findByIdAndDelete(req.params.id);
@@ -73,7 +73,7 @@ export const deleteBlog = async (req, res) => {
   }
 };
 
-// 🧩 Lấy blog cụ thể
+//Lấy blog cụ thể
 export const getBlogById = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);

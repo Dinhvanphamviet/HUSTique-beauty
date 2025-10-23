@@ -6,7 +6,7 @@ export const addAddress = async (req, res) => {
         const {address} = req.body
         const {userId} = req.auth()
         await Address.create({...address, userId})
-        res.json({success:true, message: "Address created successfully"})
+        res.json({success:true, message: "Thêm địa chỉ thành công"})
     } catch (error) {
         console.log(error.message)
         res.json({success:false, message:error.message})
@@ -33,11 +33,11 @@ export const deleteAddress = async (req, res) => {
 
     const address = await Address.findOne({ _id: id, userId })
     if (!address) {
-      return res.json({ success: false, message: "Không tìm thấy địa chỉ hoặc bạn không có quyền xóa" })
+      return res.json({ success: false, message: "Không tìm thấy địa chỉ" })
     }
 
     await Address.findByIdAndDelete(id)
-    res.json({ success: true, message: "Đã xóa địa chỉ thành công" })
+    res.json({ success: true, message: "Xóa địa chỉ thành công" })
   } catch (error) {
     console.log(error.message)
     res.json({ success: false, message: error.message })

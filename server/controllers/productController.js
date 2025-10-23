@@ -17,7 +17,7 @@ export const createProduct = async (req,res)=>{
         )
 
         await Product.create({...productData, images: imagesUrl})
-        res.json({ success: true, message: "Product created successfully"})
+        res.json({ success: true, message: "Tạo sản phẩm thành công"})
 
     } catch (error) {
         console.log(error.message)
@@ -61,7 +61,7 @@ export const toggleProduct = async (req,res)=>{
     try {
         const {productId, inStock} = req.body
         await Product.findByIdAndUpdate(productId, {inStock})
-        res.json({ success: true, message: "Product stock status updated successfully"})
+        res.json({ success: true, message: "Cập nhật trạng thái tồn kho thành công"})
 
     } catch (error) {
         console.log(error.message)
