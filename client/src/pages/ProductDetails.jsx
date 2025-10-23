@@ -5,13 +5,19 @@ import ProductFeatures from '../components/ProductFeatures'
 import RelatedProducts from '../components/RelatedProducts'
 import { useAppContext } from '../context/AppContext'
 import { assets } from '../assets/data'
+import { useUser, useClerk } from "@clerk/clerk-react";
+import toast from 'react-hot-toast'
+
 
 const ProductDetails = () => {
-  const { products, currency, addToCart} = useAppContext()
+  const { products, currency, addToCart } = useAppContext()
   const [image, setImage] = useState(null)
   const [size, setSize] = useState(null)
   const { productId } = useParams()
   const product = products.find((item) => item._id === productId)
+  const { isSignedIn } = useUser();
+  const { openSignIn } = useClerk();
+
 
   useEffect(() => {
     if (product) {
@@ -85,11 +91,10 @@ const ProductDetails = () => {
                   <button
                     key={i}
                     onClick={() => setSize(item)}
-                    className={`${
-                      item === size
+                    className={`${item === size
                         ? 'bg-[#f8c8dc] text-[#d63384] shadow-md'
                         : 'bg-white text-gray-600'
-                    } font-medium h-9 w-20 rounded-full ring-1 ring-pink-200 transition-all hover:scale-105`}
+                      } font-medium h-9 w-20 rounded-full ring-1 ring-pink-200 transition-all hover:scale-105`}
                   >
                     {item}
                   </button>
@@ -99,10 +104,21 @@ const ProductDetails = () => {
 
             {/* Buttons */}
             <div className="flex items-center gap-x-4">
-              <button onClick={() => addToCart(product._id,size)} className="bg-[#ffb6c1] hover:bg-[#ff9eb3] transition-all text-white font-semibold rounded-full sm:w-1/2 flexCenter gap-x-2 py-2 shadow-md hover:shadow-pink-200">
+              <button
+                onClick={() => {
+                  if (!isSignedIn) {
+                    toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+                    openSignIn();
+                    return;
+                  }
+                  addToCart(product._id, size);
+                }}
+                className="bg-[#ffb6c1] hover:bg-[#ff9eb3] transition-all text-white font-semibold rounded-full sm:w-1/2 flexCenter gap-x-2 py-2 shadow-md hover:shadow-pink-200"
+              >
                 Thêm vào giỏ hàng
                 <img src={assets.cartAdd} alt="" width={19} />
               </button>
+
               <button className="bg-white ring-1 ring-pink-200 hover:bg-[#ffe4ec] transition-all p-2 rounded-full shadow-sm">
                 <img src={assets.heartAdd} alt="" width={19} />
               </button>
