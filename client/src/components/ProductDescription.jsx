@@ -4,9 +4,8 @@ const ProductDescription = () => {
     return (
         <div className='mt-14 bg-white'>
             <div className='flex gap-3'>
-                <button className='medium-14 p-3 w-34 border-b-2 border-secondary'>Mô tả</button>
-                <button className='medium-14 p-3 w-34'>Bảng màu</button>
-                <button className='medium-14 p-3 w-34'>Hướng dẫn sử dụng</button>
+                <button className='medium-14 p-3 w-41 border-b-2 border-secondary'>Mô tả</button>
+                <button className='medium-14 p-3 w-41'>Hướng dẫn sử dụng</button>
             </div>
             <hr className='h-[1px] w-full text-slate-900/20' />
             <div className='flex flex-col gap-3 p-3'>

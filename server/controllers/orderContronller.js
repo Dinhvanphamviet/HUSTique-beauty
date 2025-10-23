@@ -16,7 +16,7 @@ export const placeOrderCOD = async (req, res) => {
         const { userId } = req.auth()
 
         if (!items || items.length === 0) {
-            return res.json({ success: false, message: "Please add Product first" })
+            return res.json({ success: false, message: "Vui lòng thêm sản phẩm trước" })
         }
 
         // calculate amount using items
@@ -24,12 +24,12 @@ export const placeOrderCOD = async (req, res) => {
         for (const item of items) {
             const product = await Product.findById(item.product);
             if (!product) {
-                return res.json({ success: false, message: "Product not found" })
+                return res.json({ success: false, message: "Không tìm thấy sản phẩm" })
             }
 
             const unitPrice = product.price[item.size] //pick correct size price
             if (!unitPrice) {
-                return res.json({ success: false, message: "Invalid size selected" })
+                return res.json({ success: false, message: "Dung tích bạn chọn không hợp lệ" })
             }
 
             subtotal += unitPrice * item.quantity
@@ -135,7 +135,7 @@ export const placeOrderCOD = async (req, res) => {
         await transporter.sendMail(mailOptions)
 
 
-        return res.json({ success: true, message: "Order placed successfully" })
+        return res.json({ success: true, message: "Đặt hàng thành công!" })
 
     } catch (error) {
         console.log(error.message)
@@ -155,7 +155,7 @@ export const placeOrderStripe = async (req, res) => {
 
 
         if (!items || items.length === 0) {
-            return res.json({ success: false, message: "Please add Product first" })
+            return res.json({ success: false, message: "Vui lòng thêm sản phẩm trước" })
         }
 
 
@@ -167,12 +167,12 @@ export const placeOrderStripe = async (req, res) => {
         for (const item of items) {
             const product = await Product.findById(item.product);
             if (!product) {
-                return res.json({ success: false, message: "Product not found" })
+                return res.json({ success: false, message: "Không tìm thấy sản phẩm" })
             }
 
             const unitPrice = product.price[item.size] //pick correct size price
             if (!unitPrice) {
-                return res.json({ success: false, message: "Invalid size selected" })
+                return res.json({ success: false, message: "Dung tích bạn chọn không hợp lệ" })
             }
 
             subtotal += unitPrice * item.quantity
@@ -287,7 +287,7 @@ export const updateStatus = async (req, res) => {
         const { orderId, status } = req.body
         await Order.findByIdAndUpdate(orderId, { status })
 
-        res.json({ success: true, message: "Order status updated" })
+        res.json({ success: true, message: "Trạng thái đơn hàng đã được cập nhật" })
 
     } catch (error) {
         console.log(error.message)
