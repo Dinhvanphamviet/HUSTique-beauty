@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAppContext } from '../../context/AppContext'
 import { assets } from '../../assets/data'
 import toast from 'react-hot-toast'
+import MDEditor from '@uiw/react-md-editor'
 
 const AddProduct = () => {
 
@@ -136,15 +137,17 @@ const AddProduct = () => {
           />
         </div>
 
-        {/* Mô tả */}
-        <div className='w-full'>
+        {/* Mô tả (Markdown) */}
+        <div className='w-full' data-color-mode="light">
           <h5 className='h5'>Mô tả sản phẩm</h5>
-          <textarea
-            onChange={(e) => setInputs({ ...inputs, description: e.target.value })}
-            value={inputs.description}
-            placeholder='Nhập mô tả chi tiết sản phẩm...'
-            className='px-3 py-1.5 ring-1 ring-slate-900/10 rounded-lg bg-white text-gray-600 medium-14 mt-1 w-full'
-          />
+          <div className='ring-1 ring-slate-900/10 rounded-lg bg-white mt-1'>
+            <MDEditor
+              value={inputs.description}
+              onChange={(value) => setInputs({ ...inputs, description: value })}
+              height={200}
+              preview="edit"
+            />
+          </div>
         </div>
 
         {/* Danh mục + loại */}

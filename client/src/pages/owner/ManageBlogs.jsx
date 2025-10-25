@@ -208,7 +208,7 @@ export default function ManageBlogs() {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Mô tả (Markdown)
+                                    Mô tả Blog
                                 </label>
                                 <MDEditor
                                     value={formData.description}
