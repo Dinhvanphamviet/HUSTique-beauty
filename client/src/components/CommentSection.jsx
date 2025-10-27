@@ -3,10 +3,8 @@ import { useUser, useClerk } from "@clerk/clerk-react";
 import toast from "react-hot-toast";
 import { assets } from "../assets/data";
 import { useAppContext } from "../context/AppContext";
-import { Scrollbar } from "react-scrollbars-custom";
 
-
-const CommentSection = ({ productId }) => {
+const CommentSection = ({ productId, onCommentsUpdated }) => {
     const { user, getToken, axios } = useAppContext();
     const [comments, setComments] = useState([]);
     const [content, setContent] = useState("");
@@ -20,6 +18,8 @@ const CommentSection = ({ productId }) => {
         try {
             const res = await axios.get(`/api/comments/${productId}`);
             if (res.data.success) setComments(res.data.comments);
+            if (onCommentsUpdated) onCommentsUpdated(res.data.comments);
+
         } catch (err) {
             console.error(err);
         }
@@ -51,7 +51,7 @@ const CommentSection = ({ productId }) => {
             if (data.success) {
                 toast.success("Đăng bình luận thành công");
                 setContent("");
-                fetchComments(); // refresh danh sách
+                fetchComments();
             } else {
                 toast.error(data.message);
             }
@@ -84,12 +84,15 @@ const CommentSection = ({ productId }) => {
     };
 
     return (
-        <div className="mt-10 bg-[#fff3f7] p-6 rounded-3xl shadow-sm">
+        <div
+            className={`mt-10 bg-[#fff3f7] rounded-3xl shadow-sm transition-all duration-500 overflow-hidden ${comments.length === 0 ? "p-6" : "p-6 md:p-8"
+                }`}
+        >
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">
                 Bình luận & đánh giá
             </h3>
 
-            {/* Nhập bình luận */}
+            {/* Ô nhập bình luận */}
             <div className="mb-6">
                 <textarea
                     rows="3"
@@ -123,53 +126,54 @@ const CommentSection = ({ productId }) => {
                 </button>
             </div>
 
-            {/* Danh sách bình luận có thanh cuộn UI đẹp */}
-            <Scrollbar style={{ height: 320 }} noScrollX>
-                <div className="space-y-4 pr-2">
-                    {comments.length === 0 ? (
-                        <p className="text-gray-500">Chưa có bình luận nào.</p>
-                    ) : (
-                        comments.map((c) => (
-                            <div
-                                key={c._id}
-                                className="bg-white p-4 rounded-2xl shadow-sm border border-pink-100"
-                            >
-                                <div className="flex items-center justify-between mb-1">
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={c.user?.image || assets.user}
-                                            alt=""
-                                            className="w-6 h-6 rounded-full"
-                                        />
-                                        <p className="font-semibold text-gray-800">
-                                            {c.user?.username || "Người dùng ẩn danh"}
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-1">
-                                        {[...Array(c.rating)].map((_, i) => (
-                                            <img key={i} src={assets.star} alt="" width={15} />
-                                        ))}
-                                    </div>
+            {/* Danh sách bình luận */}
+            {comments.length === 0 ? (
+                <p className="text-gray-500 text-sm">Chưa có bình luận nào.</p>
+            ) : (
+                <div
+                    className={`space-y-4 pr-2 transition-all duration-300 ${comments.length >= 3
+                            ? "max-h-[320px] overflow-y-auto scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-pink-50"
+                            : "max-h-none"
+                        }`}
+                >
+                    {comments.map((c) => (
+                        <div
+                            key={c._id}
+                            className="bg-white p-4 rounded-2xl shadow-sm border border-pink-100"
+                        >
+                            <div className="flex items-center justify-between mb-1">
+                                <div className="flex items-center gap-2">
+                                    <img
+                                        src={c.user?.image || assets.user}
+                                        alt=""
+                                        className="w-6 h-6 rounded-full"
+                                    />
+                                    <p className="font-semibold text-gray-800">
+                                        {c.user?.username || "Người dùng ẩn danh"}
+                                    </p>
                                 </div>
-
-                                <p className="text-gray-700 text-sm">{c.content}</p>
-
-                                <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
-                                    <span>{new Date(c.createdAt).toLocaleString()}</span>
-                                    {user?.id === c.user?._id && (
-                                        <button
-                                            onClick={() => handleDelete(c._id)}
-                                            className="text-red-500 hover:underline"
-                                        >
-                                            Xóa
-                                        </button>
-                                    )}
+                                <div className="flex gap-1">
+                                    {[...Array(c.rating)].map((_, i) => (
+                                        <img key={i} src={assets.star} alt="" width={15} />
+                                    ))}
                                 </div>
                             </div>
-                        ))
-                    )}
+                            <p className="text-gray-700 text-sm">{c.content}</p>
+                            <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
+                                <span>{new Date(c.createdAt).toLocaleString()}</span>
+                                {user?.id === c.user?._id && (
+                                    <button
+                                        onClick={() => handleDelete(c._id)}
+                                        className="text-red-500 hover:underline"
+                                    >
+                                        Xóa
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            </Scrollbar>
+            )}
         </div>
     );
 };

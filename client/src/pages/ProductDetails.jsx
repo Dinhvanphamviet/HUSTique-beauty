@@ -177,7 +177,19 @@ const ProductDetails = () => {
         <ProductFeatures />
 
         {/* Comment Section */}
-        <CommentSection productId={productId} />
+        <CommentSection
+          productId={productId}
+          onCommentsUpdated={(comments) => {
+            const count = comments.length;
+            const avg =
+              count > 0
+                ? comments.reduce((sum, c) => sum + (c.rating || 0), 0) / count
+                : 0;
+            setAvgRating(avg.toFixed(1));
+            setCommentCount(count);
+          }}
+        />
+
 
         {/* Related Products */}
         <div className="mt-14">
