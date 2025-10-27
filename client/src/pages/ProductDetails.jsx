@@ -7,17 +7,19 @@ import { useAppContext } from '../context/AppContext'
 import { assets } from '../assets/data'
 import { useUser, useClerk } from "@clerk/clerk-react";
 import toast from 'react-hot-toast'
-
+import CommentSection from "../components/CommentSection";
 
 const ProductDetails = () => {
-  const { products, currency, addToCart } = useAppContext()
+  const { products, currency, addToCart, axios } = useAppContext()
   const [image, setImage] = useState(null)
   const [size, setSize] = useState(null)
+  const [avgRating, setAvgRating] = useState(0)
+  const [commentCount, setCommentCount] = useState(0)
+
   const { productId } = useParams()
   const product = products.find((item) => item._id === productId)
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
-
 
   useEffect(() => {
     if (product) {
@@ -26,10 +28,33 @@ const ProductDetails = () => {
     }
   }, [product])
 
+  // Fetch comments để lấy rating trung bình và số lượng đánh giá
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const res = await axios.get(`/api/comments/${productId}`)
+        if (res.data.success) {
+          const comments = res.data.comments
+          const count = comments.length
+          const avg =
+            count > 0
+              ? comments.reduce((sum, c) => sum + (c.rating || 0), 0) / count
+              : 0
+
+          setAvgRating(avg.toFixed(1))
+          setCommentCount(count)
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy đánh giá:", error)
+      }
+    }
+
+    if (productId) fetchComments()
+  }, [productId, axios])
+
   return (
     product && (
       <div className="max-padd-container pt-20">
-        {/* Product Data */}
         <div className="flex gap-10 flex-col xl:flex-row mt-3 mb-6">
           {/* Image Section */}
           <div className="flex flex-1 gap-x-2 max-w-[533px]">
@@ -63,14 +88,22 @@ const ProductDetails = () => {
               {product.title}
             </h3>
 
-            {/* Rating & Price */}
+            {/* ⭐ Rating & Count */}
             <div className="flex items-center gap-x-2 pt-3">
-              <div className="flex gap-x-2 text-yellow-400">
+              <div className="flex gap-x-1">
                 {[...Array(5)].map((_, i) => (
-                  <img key={i} src={assets.star} alt="" width={19} />
+                  <img
+                    key={i}
+                    src={assets.star}
+                    alt=""
+                    width={19}
+                    className={i < Math.round(avgRating) ? "opacity-100" : "opacity-30"}
+                  />
                 ))}
               </div>
-              <p className="text-sm text-gray-500">(222 đánh giá)</p>
+              <p className="text-sm text-gray-500">
+                {avgRating} / 5 ({commentCount} đánh giá)
+              </p>
             </div>
 
             <div className="h4 flex items-baseline gap-4 my-2">
@@ -124,12 +157,9 @@ const ProductDetails = () => {
               </button>
             </div>
 
-            {/* Extra Info */}
             <div className="flex items-center gap-x-2 mt-3 text-gray-600">
               <img src={assets.delivery} alt="" width={17} />
-              <span className="text-sm">
-                Miễn phí giao hàng cho đơn từ 500$
-              </span>
+              <span className="text-sm">Miễn phí giao hàng cho đơn từ 500$</span>
             </div>
 
             <hr className="my-4 w-2/3 border-pink-200" />
@@ -145,6 +175,10 @@ const ProductDetails = () => {
         {/* Description & Features */}
         <ProductDescription description={product.description} />
         <ProductFeatures />
+
+        {/* Comment Section */}
+        <CommentSection productId={productId} />
+
         {/* Related Products */}
         <div className="mt-14">
           <RelatedProducts product={product} productId={productId} />

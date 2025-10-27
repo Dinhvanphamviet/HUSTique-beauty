@@ -12,6 +12,7 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import blogRouter from "./routes/blogRoute.js";
 import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
+import commentRouter from "./routes/commentRoute.js";
 
 
 await connectDB() //Connect to MongoDB
@@ -39,6 +40,7 @@ app.use("/api/addresses", addressRouter)
 app.use("/api/cart", cartRouter)
 app.use("/api/orders", orderRouter)
 app.use("/api/blogs", blogRouter);
+app.use("/api/comments", commentRouter);
 
 
 
