@@ -69,6 +69,15 @@ export const getCommentsByProduct = async (req, res) => {
   }
 };
 
+export const getAllComments = async (req, res) => {
+  const comments = await Comment.find()
+    .populate("user", "username image")
+    .sort({ createdAt: -1 });
+
+  res.json({ success: true, comments });
+};
+
+
 export const deleteComment = async (req, res) => {
   try {
     const { id } = req.params;
