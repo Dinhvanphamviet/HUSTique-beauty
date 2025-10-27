@@ -15,9 +15,10 @@ HUSTique Beauty is an e-commerce platform that allows users to view, search, and
     * User Authentication (Login, Register) using Clerk.
     * User's "My Orders" page.
     * Product Search.
+    * Product Comment.
     * Responsive Design.
 * **Server-side:**
-    * RESTful API for Products, Users, Orders, Cart, Blog, and Addresses.
+    * RESTful API for Products, Users, Orders, Cart, Blog, Comment and Addresses.
     * Secure payment processing with Stripe.
     * User authentication and management with Clerk.
     * Image storage and management using Cloudinary.
