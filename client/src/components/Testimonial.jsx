@@ -36,15 +36,7 @@ const Testimonial = () => {
       <p className="text-sm py-4 text-gray-800">{card.content}</p>
       <div className="flex items-center justify-between text-slate-500 text-xs">
         <div className="flex items-center gap-1">
-          <span>Đăng trên</span>
-          <a
-            href="https://x.com"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-sky-500"
-          >
-            <img src={assets.twitter} alt="Biểu tượng X" width={16} />
-          </a>
+          <span>HUSTique Beauty</span>
         </div>
         <p>{new Date(card.createdAt).toLocaleDateString("vi-VN")}</p>
       </div>
