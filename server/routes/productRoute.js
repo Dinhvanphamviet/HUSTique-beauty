@@ -1,7 +1,7 @@
 import express from "express"
 import { upload } from "../middleware/multer.js"
 import authUser from "../middleware/authMiddleware.js"
-import { createProduct, listProduct, singleProduct, toggleProduct } from "../controllers/productController.js"
+import { createProduct, listProduct, singleProduct, toggleProduct} from "../controllers/productController.js"
 
 const productRouter = express.Router()
 

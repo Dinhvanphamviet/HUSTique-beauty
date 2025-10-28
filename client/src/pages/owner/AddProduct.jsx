@@ -195,7 +195,7 @@ const AddProduct = () => {
             <input
               onChange={(e) => {
                 const value = e.target.value
-                if (value >= 0) setNewPrice(value) 
+                if (value >= 0) setNewPrice(value)
               }}
               value={newPrice}
               type="number"
@@ -226,29 +226,37 @@ const AddProduct = () => {
         </div>
 
         {/* Hình ảnh */}
-        <div className='mt-4'>
-          <h5 className='h5 mb-1'>Hình ảnh sản phẩm</h5>
-          <div className='flex gap-2 mt-2'>
+        <div className="mt-4">
+          <h5 className="h5 mb-2">Hình ảnh sản phẩm</h5>
+          <div className="flex flex-wrap gap-4 mt-2">
             {Object.keys(images).map((key) => (
-              <label key={key} htmlFor={`productImage${key}`} className='ring-1 ring-slate-900/10 overflow-hidden rounded-lg cursor-pointer'>
+              <label
+                key={key}
+                htmlFor={`productImage${key}`}
+                className="w-32 h-32 border-2 border-dashed rounded-xl flex items-center justify-center cursor-pointer hover:bg-pink-50 transition"
+              >
                 <input
                   onChange={(e) => setImages({ ...images, [key]: e.target.files[0] })}
                   type="file"
-                  accept='image/*'
+                  accept="image/*"
                   id={`productImage${key}`}
                   hidden
                 />
-                <div className='h-20 w-24 bg-white flexCenter'>
+
+                {images[key] ? (
                   <img
-                    src={images[key] ? URL.createObjectURL(images[key]) : assets.uploadIcon}
-                    alt=""
-                    className='w-16 object-contain'
+                    src={URL.createObjectURL(images[key])}
+                    alt="preview"
+                    className="w-full h-full object-cover rounded-xl"
                   />
-                </div>
+                ) : (
+                  <span className="text-gray-400 text-3xl">＋</span>
+                )}
               </label>
             ))}
           </div>
         </div>
+
 
         {/* Nổi bật */}
         <div className="flex items-center gap-2 mt-3">

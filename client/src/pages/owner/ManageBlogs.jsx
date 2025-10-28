@@ -95,71 +95,74 @@ export default function ManageBlogs() {
                 </button>
             </div>
 
-            <div className="overflow-x-auto bg-white shadow-lg rounded-xl">
-                <table className="w-full text-left border-collapse">
-                    <thead className="bg-gray-100 text-gray-600 uppercase text-sm">
-                        <tr>
-                            <th className="px-6 py-3">Ảnh</th>
-                            <th className="px-6 py-3">Tiêu đề</th>
-                            <th className="px-6 py-3">Chủ đề</th>
-                            <th className="px-6 py-3">Mô tả</th>
-                            <th className="px-6 py-3 text-center">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {blogs.length === 0 ? (
-                            <tr>
-                                <td colSpan="5" className="text-center py-6 text-gray-500">
-                                    Chưa có blog nào
-                                </td>
-                            </tr>
-                        ) : (
-                            blogs.map((blog) => (
-                                <tr key={blog._id} className="border-t hover:bg-pink-50 transition">
-                                    <td className="px-6 py-3">
-                                        {blog.imageUrl ? (
-                                            <img
-                                                src={blog.imageUrl}
-                                                alt={blog.title}
-                                                className="w-16 h-16 rounded-md object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-16 h-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-400">
-                                                No Img
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-3 font-medium text-gray-800">{blog.title}</td>
-                                    <td className="px-6 py-3 text-sm text-blue-600 font-medium">{blog.category || "—"}</td>
-                                    <td className="px-6 py-3 text-gray-700 max-w-[300px]">
-                                        <div className="line-clamp-3 prose prose-sm text-gray-700 !bg-transparent">
-                                            <MarkdownPreview
-                                                source={blog.description}
-                                                className="!bg-transparent !shadow-none !border-none !p-0"
-                                            />
-                                        </div>
-                                    </td>
+            {/* Danh sách blog */}
+            <div className="bg-white shadow-lg rounded-xl p-4">
+                {/* Header */}
+                <div className='grid grid-cols-[1fr_3.5fr_1.5fr_3fr_1.2fr] items-center py-4 px-2 bg-secondary text-white bold-14 sm:bold-15 mb-2 rounded-xl'>
+                    <h5>Hình ảnh</h5>
+                    <h5>Tiêu đề</h5>
+                    <h5>Chủ đề</h5>
+                    <h5>Mô tả</h5>
+                    <h5 className="text-center">Hành động</h5>
+                </div>
 
-                                    <td className="px-6 py-3 flex justify-center gap-3">
-                                        <button
-                                            onClick={() => handleOpenModal(blog)}
-                                            className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md transition"
-                                        >
-                                            Sửa
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(blog._id)}
-                                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition"
-                                        >
-                                            Xóa
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                {/* Body */}
+                {blogs.length === 0 ? (
+                    <div className="text-center text-gray-500 py-6">
+                        Chưa có blog nào
+                    </div>
+                ) : (
+                    blogs.map((blog) => (
+                        <div key={blog._id} className="grid grid-cols-[1fr_3.5fr_1.5fr_3fr_1.2fr] items-center py-3 px-2 border-b last:border-none hover:bg-pink-50 transition rounded-lg">
+                            {/* Ảnh */}
+                            <div className="flex items-center">
+                                {blog.imageUrl ? (
+                                    <img
+                                        src={blog.imageUrl}
+                                        alt={blog.title}
+                                        className="w-16 h-16 rounded-md object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-16 h-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-400">
+                                        No Img
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Tiêu đề */}
+                            <div className="font-medium text-gray-800 truncate">{blog.title}</div>
+
+                            {/* Chủ đề */}
+                            <div className="text-blue-600 font-medium">{blog.category || "—"}</div>
+
+                            {/* Mô tả */}
+                            <div className="text-gray-700 line-clamp-3 prose prose-sm max-w-[300px] !bg-transparent">
+                                <MarkdownPreview
+                                    source={blog.description}
+                                    className="!bg-transparent !shadow-none !border-none !p-0"
+                                />
+                            </div>
+
+                            {/* Hành động */}
+                            <div className="flex justify-center gap-2">
+                                <button
+                                    onClick={() => handleOpenModal(blog)}
+                                    className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md transition"
+                                >
+                                    Sửa
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(blog._id)}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition"
+                                >
+                                    Xóa
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
+
 
             {/* Modal thêm/sửa blog */}
             {isModalOpen && (
@@ -226,7 +229,7 @@ export default function ManageBlogs() {
                                     Ảnh minh họa
                                 </label>
                                 <div
-                                    className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:bg-pink-50"
+                                    className="w-32 h-32 border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer hover:bg-pink-50"
                                     onClick={() => document.getElementById("uploadImage").click()}
                                 >
                                     {preview ? (
