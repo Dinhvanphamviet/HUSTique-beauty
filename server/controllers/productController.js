@@ -69,6 +69,16 @@ export const toggleProduct = async (req,res)=>{
     }
 }
 
+//Delete product
+export const deleteProduct = async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
 
 
 
