@@ -26,7 +26,6 @@ export const createProduct = async (req,res)=>{
     }
 }
 
-
 // Controller Function for Get Product List [GET '/']
 
 export const listProduct = async (req,res)=>{
@@ -75,6 +74,37 @@ export const deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete(req.params.id);
     res.json({ success: true });
   } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+
+// Controller Function for Update Product [PUT '/:id']
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const productData = JSON.parse(req.body.productData || "{}");
+    const files = req.files;
+
+    let updateFields = { ...productData };
+
+    // Nếu có file ảnh mới thì upload lên Cloudinary
+    if (files && files.length > 0) {
+      const imagesUrl = await Promise.all(
+        files.map(async (file) => {
+          const result = await cloudinary.uploader.upload(file.path, {
+            resource_type: "image",
+          });
+          return result.secure_url;
+        })
+      );
+      updateFields.images = imagesUrl;
+    }
+
+    await Product.findByIdAndUpdate(id, updateFields, { new: true });
+    res.json({ success: true, message: "Cập nhật sản phẩm thành công!" });
+  } catch (error) {
+    console.log(error.message);
     res.json({ success: false, message: error.message });
   }
 };
