@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import toast from "react-hot-toast";
 import { useAppContext } from "../../context/AppContext";
 import BlogForm from "../../components/BlogForm";
@@ -16,14 +16,15 @@ export default function ManageBlogs() {
     }
   }, []);
 
-  useEffect(() => {
+   useEffect(() => {
     if (blogs.length > 0) {
       localStorage.setItem(
         "blog_map",
-        JSON.stringify(Object.fromEntries(blogs.map((b) => [b._id, b]))),
+        JSON.stringify(Object.fromEntries(blogs.map(b => [b._id, b])))
       );
     }
   }, [blogs]);
+
 
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa blog này?")) return;
@@ -91,7 +92,7 @@ export default function ManageBlogs() {
           blogs.map((blog) => (
             <div
               key={blog._id}
-              className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr] items-center gap-2 p-2 bg-white rounded-lg hover:bg-pink-50 transition"
+              className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr] items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md transition"
             >
               <div className="w-16 h-16">
                 {blog.imageUrl ? (

@@ -2,12 +2,17 @@ import React from "react";
 import toast from "react-hot-toast";
 import { useAppContext } from "../../context/AppContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import EditProductModal from "@/components/EditProductModal";
+import { useState } from "react";
+
 
 const ListProduct = () => {
   const { products, currency, fetchProducts, axios, getToken } =
     useAppContext();
 
   const formatPrice = (price) => Number(price).toLocaleString("vi-VN") + " ₫";
+  const [editingProduct, setEditingProduct] = useState(null);
+
 
   const toggleStock = async (productId, inStock) => {
     try {
@@ -91,7 +96,15 @@ const ListProduct = () => {
                 </label>
               </div>
               <div className="flex gap-2">
-                <button className="bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition">
+                <a
+                  href={`https://hustique-beauty.vercel.app/collection/${product._id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-green-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-green-600 transition"
+                >
+                  Xem
+                </a>
+                <button onClick={() => setEditingProduct(product)} className="bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition">
                   Sửa
                 </button>
                 <button
@@ -105,7 +118,16 @@ const ListProduct = () => {
           ))}
         </div>
       </ScrollArea>
+      {editingProduct && (
+        <EditProductModal
+          product={editingProduct}
+          onClose={() => setEditingProduct(null)}
+          onUpdated={fetchProducts}
+        />
+      )}
+
     </div>
+
   );
 };
 
