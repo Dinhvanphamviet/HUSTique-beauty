@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export const createComment = async (req, res) => {
   try {
     const { content, rating, productId } = req.body;
-    const userId = req.user?._id; // user được set từ middleware authUser
+    const userId = req.user?._id; 
 
     if (!content || !productId) {
       return res.status(400).json({
