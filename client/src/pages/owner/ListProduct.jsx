@@ -5,10 +5,15 @@ import { useAppContext } from '../../context/AppContext'
 const ListProduct = () => {
   const { products, currency, fetchProducts, axios, getToken } = useAppContext()
 
+  const formatPrice = (price) => Number(price).toLocaleString('vi-VN') + ' ₫'
 
   const toggleStock = async (productId, inStock) => {
     try {
-      const { data } = await axios.post('/api/products/toggle-stock', { productId, inStock }, { headers: { Authorization: `Bearer ${await getToken()}` } })
+      const { data } = await axios.post(
+        '/api/products/toggle-stock',
+        { productId, inStock },
+        { headers: { Authorization: `Bearer ${await getToken()}` } }
+      )
       if (data.success) {
         fetchProducts()
         toast.success(data.message)
@@ -39,9 +44,6 @@ const ListProduct = () => {
     }
   };
 
-
-
-
   return (
     <div className='px-2 sm:px-6 py-12 m-2 h-[97vh] bg-primary overflow-y-scroll lg:w-11/12 rounded-xl'>
       <div className='flex flex-col gap-2 lg:w-11/12'>
@@ -63,8 +65,7 @@ const ListProduct = () => {
             <h5 className="text-sm font-semibold">{product.title}</h5>
             <p className="text-sm font-semibold">{product.category}</p>
             <div className="text-sm font-semibold">
-              Chỉ từ {currency}
-              {product.price[product.sizes[0]]}
+              Chỉ từ {formatPrice(product.price[product.sizes[0]])}
             </div>
             <div>
               <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">

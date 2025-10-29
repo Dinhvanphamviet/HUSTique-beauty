@@ -20,7 +20,7 @@ export const AppContextProvider = ({ children }) => {
   const getBlogById = (id) => blogs.find(b => b._id === id)
   const navigate = useNavigate()
   const currency = import.meta.env.VITE_CURRENCY
-  const delivery_charges = 10;
+  const delivery_charges = 20000;
 
   //Clerk
   const { user } = useUser()

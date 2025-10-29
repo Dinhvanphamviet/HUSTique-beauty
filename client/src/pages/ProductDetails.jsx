@@ -10,7 +10,7 @@ import toast from 'react-hot-toast'
 import CommentSection from "../components/CommentSection";
 
 const ProductDetails = () => {
-  const { products, currency, addToCart, axios } = useAppContext()
+  const { products, addToCart, axios } = useAppContext()
   const [image, setImage] = useState(null)
   const [size, setSize] = useState(null)
   const [avgRating, setAvgRating] = useState(0)
@@ -51,6 +51,11 @@ const ProductDetails = () => {
 
     if (productId) fetchComments()
   }, [productId, axios])
+
+  // Format giá VNĐ
+  const formatPrice = (price) => {
+    return Number(price).toLocaleString('vi-VN') + ' ₫'
+  }
 
   return (
     product && (
@@ -108,8 +113,7 @@ const ProductDetails = () => {
 
             <div className="h4 flex items-baseline gap-4 my-2">
               <h3 className="text-2xl font-bold">
-                {currency}
-                {product.price[size]}.00
+                {size && formatPrice(product.price[size])}
               </h3>
             </div>
 
@@ -159,7 +163,7 @@ const ProductDetails = () => {
 
             <div className="flex items-center gap-x-2 mt-3 text-gray-600">
               <img src={assets.delivery} alt="" width={17} />
-              <span className="text-sm">Miễn phí giao hàng cho đơn từ 500$</span>
+              <span className="text-sm">Miễn phí giao hàng cho đơn từ 500.000 ₫</span>
             </div>
 
             <hr className="my-4 w-2/3 border-pink-200" />
@@ -189,7 +193,6 @@ const ProductDetails = () => {
             setCommentCount(count);
           }}
         />
-
 
         {/* Related Products */}
         <div className="mt-14">

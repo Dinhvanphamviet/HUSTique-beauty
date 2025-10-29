@@ -5,8 +5,7 @@ import { useAppContext } from '../context/AppContext'
 import { assets } from '../assets/data'
 
 const Cart = () => {
-
-  const { navigate, products, currency, cartItems, updateQuantity } = useAppContext()
+  const { navigate, products, cartItems, updateQuantity } = useAppContext()
   const [cartData, setCartData] = useState([])
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const Cart = () => {
   const increment = (id, size) => {
     const currentQuantity = cartItems[id][size]
     updateQuantity(id, size, currentQuantity + 1)
-
   }
 
   const decrement = (id, size) => {
@@ -42,7 +40,7 @@ const Cart = () => {
   return products && cartItems ? (
     <div className='max-padd-container py-16 pt-28 bg-primary'>
       <div className='flex flex-col xl:flex-row gap-20 xl:gap-28'>
-        {/*Left Side*/}
+        {/* Left Side */}
         <div className='flex flex-[2] flex-col gap-2 text-[95%]'>
           <Title title1={"Giỏ hàng"} title2={"Tổng quan"} titleStyles={"pb-5"} />
           <div className="grid grid-cols-[6fr_2fr_1fr] font-medium bg-white p-2 rounded-xl">
@@ -53,6 +51,9 @@ const Cart = () => {
           {cartData.map((item, i) => {
             const product = products.find((product) => product._id === item._id)
             const quantity = cartItems[item._id][item.size]
+            // Format giá VNĐ
+            const subtotalVNĐ = (product.price[item.size] * quantity).toLocaleString('vi-VN')
+
             return (
               <div key={i} className='grid grid-cols-[6fr_2fr_1fr] items-center bg-white p-2 rounded-xl'>
                 <div className='flex items-center md:gap-6 gap-3'>
@@ -72,13 +73,15 @@ const Cart = () => {
                   </div>
                 </div>
                 <div className='text-center bold-16'>
-                  {currency}{product.price[item.size] * quantity}.00</div>
+                  {subtotalVNĐ} ₫
+                </div>
                 <button onClick={() => updateQuantity(item._id, item.size, 0)} className='cursor-pointer mx-auto'><img src={assets.cartRemove} alt="" width={22} /></button>
               </div>
             )
           })}
         </div>
-        {/*Left Side*/}
+
+        {/* Right Side */}
         <div className='flex flex-1 flex-col'>
           <div className='max-w-[379px] w-full bg-white p-5 py-10 max-md:mt-16 rounded-xl'>
             <CartTotal />

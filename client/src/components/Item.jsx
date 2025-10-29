@@ -2,13 +2,16 @@ import { useAppContext } from '../context/AppContext'
 import React, { useState } from 'react'
 
 const Item = ({ product }) => {
-  const { navigate, currency } = useAppContext()
+  const { navigate } = useAppContext()
   const [hovered, setHovered] = useState(false)
   const [size, setSize] = useState(product.sizes[0])
 
   // Sakura pastel colors
   const colors = ["#FFE4E1", "#FFDCE3", "#FFF0F3"]
   const bgcolor = colors[(parseInt(product._id?.slice(-4) || "0", 16)) % colors.length]
+
+  // Lấy giá theo size và format VNĐ
+  const priceVNĐ = product.price[size]?.toLocaleString('vi-VN') || '0'
 
   return (
     <div
@@ -46,7 +49,7 @@ const Item = ({ product }) => {
               {product.title}
             </h5>
             <p className="text-sm font-semibold text-gray-900">
-              {currency}{product.price[size]}.00
+              {priceVNĐ} ₫
             </p>
           </div>
           <p className="text-xs text-gray-600 line-clamp-2 pt-1">

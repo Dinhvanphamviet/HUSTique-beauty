@@ -51,7 +51,6 @@ const CartTotal = () => {
     }
   }
 
-
   // Đặt hàng
   const placeOrder = async () => {
     try {
@@ -77,7 +76,7 @@ const CartTotal = () => {
         size: item.size,
       }))
 
-      // 🧾 Thanh toán
+      // Thanh toán
       if (method === "COD") {
         const { data } = await axios.post(
           "/api/orders/cod",
@@ -120,12 +119,13 @@ const CartTotal = () => {
     }
 
     document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // Tính toán
+  const subtotal = getCartAmount()
+  const taxAmount = Math.round(subtotal * 0.02)
+  const totalAmount = subtotal + delivery_charges + taxAmount
 
   return (
     <div>
@@ -153,13 +153,9 @@ const CartTotal = () => {
 
             {/* Danh sách địa chỉ */}
             {showAddress && (
-              <div ref={addressRef}  className='absolute top-10 py-1 bg-white ring-1 ring-slate-900/10 text-sm w-full z-10 rounded-md shadow'>
-
+              <div ref={addressRef} className='absolute top-10 py-1 bg-white ring-1 ring-slate-900/10 text-sm w-full z-10 rounded-md shadow'>
                 {addresses.map((address, index) => (
-                  <div
-                    key={index}
-                    className='flex justify-between items-center p-2 hover:bg-gray-100 medium-14'
-                  >
+                  <div key={index} className='flex justify-between items-center p-2 hover:bg-gray-100 medium-14'>
                     <p
                       onClick={() => {
                         setSelectAddress(address)
@@ -216,23 +212,19 @@ const CartTotal = () => {
       <div className='mt-4 space-y-2'>
         <div className='flex justify-between'>
           <h5 className='h5'>Giá sản phẩm</h5>
-          <p className='font-bold'>{currency}{getCartAmount()}</p>
+          <p className='font-bold'>{subtotal.toLocaleString('vi-VN')} {currency}</p>
         </div>
         <div className='flex justify-between'>
           <h5 className='h5'>Phí vận chuyển</h5>
-          <p className='font-bold'>
-            {currency}{getCartAmount() === 0 ? "0.00" : `${delivery_charges}.00`}
-          </p>
+          <p className='font-bold'>{delivery_charges.toLocaleString('vi-VN')} {currency}</p>
         </div>
         <div className='flex justify-between'>
           <h5 className='h5'>Thuế (2%)</h5>
-          <p className='font-bold'>{currency}{(getCartAmount() * 2) / 100}</p>
+          <p className='font-bold'>{taxAmount.toLocaleString('vi-VN')} {currency}</p>
         </div>
         <div className='flex justify-between'>
           <h4 className='h4'>Tổng thanh toán:</h4>
-          <p className='bold-18'>
-            {currency}{getCartAmount() === 0 ? "0.00" : getCartAmount() + delivery_charges + (getCartAmount() * 2) / 100}
-          </p>
+          <p className='bold-18'>{totalAmount.toLocaleString('vi-VN')} {currency}</p>
         </div>
       </div>
 

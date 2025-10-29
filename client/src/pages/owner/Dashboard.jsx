@@ -4,12 +4,14 @@ import { assets } from '../../assets/data'
 import toast from 'react-hot-toast'
 
 const Dashboard = () => {
-  const { user, currency, axios, getToken } = useAppContext()
+  const { user, axios, getToken } = useAppContext()
   const [dashboardData, setDashboardData] = useState({
     orders: [],
     totalOrders: 0,
-    totalRevenue: 0,
+    totalRevenue: 0, 
   })
+
+  const formatPrice = (price) => Number(price).toLocaleString('vi-VN') + ' ₫'
 
   const getDashboardData = async () => {
     try {
@@ -49,6 +51,11 @@ const Dashboard = () => {
     if (user) getDashboardData()
   }, [user])
 
+  const totalRevenueWithDelivered = dashboardData.totalRevenue + 
+    dashboardData.orders
+      .filter(order => order.status === "Delivered" && order.paymentMethod === "COD")
+      .reduce((sum, order) => sum + Number(order.amount || 0), 0)
+
   return (
     <div className="md:px-8 py-6 xl:py-8 m-1 sm:m-3 h-[97vh] overflow-y-scroll lg:w-11/12 bg-primary shadow rounded-xl">
       {/* Tổng quan */}
@@ -57,7 +64,7 @@ const Dashboard = () => {
           <img src={assets.graph} alt="" className="hidden sm:flex w-8" />
           <div>
             <h4 className="h4">
-              {dashboardData?.totalOrders?.toString().padStart(2, '0')}
+              {dashboardData.totalOrders.toString().padStart(2, '0')}
             </h4>
             <h5 className="h5 text-secondary">Tổng số đơn hàng</h5>
           </div>
@@ -65,10 +72,7 @@ const Dashboard = () => {
         <div className="flexStart gap-7 p-5 bg-[#fff4d2] lg:min-w-56 rounded-xl">
           <img src={assets.dollar} alt="" className="hidden sm:flex w-8" />
           <div>
-            <h4 className="h4">
-              {currency}
-              {dashboardData?.totalRevenue || 0}
-            </h4>
+            <h4 className="h4">{formatPrice(totalRevenueWithDelivered)}</h4>
             <h5 className="h5 text-secondary">Tổng doanh thu</h5>
           </div>
         </div>
@@ -99,10 +103,7 @@ const Dashboard = () => {
                     <div className="flex flex-wrap gap-3 max-sm:gap-y-1 mt-1">
                       <div className="flex items-center gap-x-2">
                         <h5 className="medium-14">Giá:</h5>
-                        <p>
-                          {currency}
-                          {item.product.price[item.size]}
-                        </p>
+                        <p>{formatPrice(item.product.price[item.size])}</p>
                       </div>
                       <div className="flex items-center gap-x-2">
                         <h5 className="medium-14">Số lượng:</h5>
@@ -175,8 +176,7 @@ const Dashboard = () => {
                   <div className="flex items-center gap-x-2">
                     <h5 className="medium-14">Tổng tiền:</h5>
                     <p className="text-gray-400 text-sm break-all">
-                      {currency}
-                      {order.amount}
+                      {formatPrice(order.amount)}
                     </p>
                   </div>
                 </div>
