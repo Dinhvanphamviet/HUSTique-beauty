@@ -128,6 +128,18 @@ export const AppContextProvider = ({ children }) => {
     return total
   }
 
+  // Fetch all blogs
+  const fetchBlogs = async () => {
+    try {
+      const res = await axios.get("/api/blogs");
+      const data = res.data.blogs || [];
+      setBlogs(data);
+      localStorage.setItem("blogs", JSON.stringify(data));
+    } catch (err) {
+      console.error("Lỗi tải blog:", err);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       getUser()
@@ -138,9 +150,18 @@ export const AppContextProvider = ({ children }) => {
     fetchProducts()
   }, [])
 
+  useEffect(() => {
+    fetchProducts();
+    fetchBlogs(); // 
+    const interval = setInterval(fetchBlogs, 60000); 
+    return () => clearInterval(interval);
+  }, []);
 
-  const value = { navigate, user, products, currency, searchQuery, setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, isOwner, setIsOwner, fetchProducts, axios, getToken,  blogs,
-  setBlogs, getBlogById }
+
+  const value = {
+    navigate, user, products, currency, searchQuery, setSearchQuery, cartItems, setCartItems, method, setMethod, delivery_charges, addToCart, getCartCount, updateQuantity, getCartAmount, isOwner, setIsOwner, fetchProducts, axios, getToken, blogs,
+    setBlogs, getBlogById, fetchBlogs
+  }
 
 
 

@@ -46,7 +46,7 @@ const ListProduct = () => {
 
   return (
     <div className='px-2 sm:px-6 py-12 m-2 h-[97vh] bg-primary overflow-y-scroll lg:w-11/12 rounded-xl'>
-      <div className='flex flex-col gap-2 lg:w-11/12'>
+      <div className='flex flex-col gap-2'>
         <div className='grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_1.5fr] items-center py-4 px-2 bg-secondary text-white bold-14 sm:bold-15 mb-1 rounded-xl'>
           <h5>Hình ảnh</h5>
           <h5>Tên sản phẩm</h5>
