@@ -37,7 +37,9 @@ export default function BlogDetail() {
         // Dù có cache vẫn fetch để đảm bảo dữ liệu mới
         const [resBlog, resAll] = await Promise.all([
           axios.get(`/api/blogs/${id}`),
-          blogs.length > 0 ? Promise.resolve({ data: { blogs } }) : axios.get("/api/blogs"),
+          blogs.length > 0
+            ? Promise.resolve({ data: { blogs } })
+            : axios.get("/api/blogs"),
         ]);
 
         if (resBlog.data?.success) {
@@ -46,7 +48,9 @@ export default function BlogDetail() {
           localStorage.setItem(`blog_${id}`, JSON.stringify(newBlog));
 
           // Cập nhật vào blog_map
-          const currentMap = JSON.parse(localStorage.getItem("blog_map") || "{}");
+          const currentMap = JSON.parse(
+            localStorage.getItem("blog_map") || "{}",
+          );
           currentMap[id] = newBlog;
           localStorage.setItem("blog_map", JSON.stringify(currentMap));
         }
@@ -93,7 +97,9 @@ export default function BlogDetail() {
             />
           )}
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{blog.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            {blog.title}
+          </h1>
 
           <p className="text-pink-500 font-medium mb-6">
             {blog.category || "Không có chủ đề"}

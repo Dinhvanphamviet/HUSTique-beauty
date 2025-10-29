@@ -63,9 +63,12 @@ const Testimonial = () => {
         `}</style>
 
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-800">Cảm nhận từ khách hàng</h2>
+          <h2 className="text-3xl font-bold text-gray-800">
+            Cảm nhận từ khách hàng
+          </h2>
           <p className="text-gray-600 mt-2">
-            Những chia sẻ chân thật từ các khách hàng đã tin tưởng và lựa chọn HUSTique Beauty.
+            Những chia sẻ chân thật từ các khách hàng đã tin tưởng và lựa chọn
+            HUSTique Beauty.
           </p>
         </div>
 

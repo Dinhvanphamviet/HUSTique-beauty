@@ -1,94 +1,113 @@
-import React, { useEffect, useState } from 'react'
-import Title from '../components/Title'
-import { useAppContext } from '../context/AppContext'
+import React, { useEffect, useState } from "react";
+import Title from "../components/Title";
+import { useAppContext } from "../context/AppContext";
 
 const MyOrders = () => {
-  const { user, getToken, axios } = useAppContext()
-  const [orders, setOrders] = useState([])
+  const { user, getToken, axios } = useAppContext();
+  const [orders, setOrders] = useState([]);
 
   const loadOrdersData = async () => {
-    if (!user) return
+    if (!user) return;
     try {
       const { data } = await axios.post(
         "/api/orders/userorders",
         {},
-        { headers: { Authorization: `Bearer ${await getToken()}` } }
+        { headers: { Authorization: `Bearer ${await getToken()}` } },
       );
       if (data.success) {
-        setOrders(data.orders.reverse())
+        setOrders(data.orders.reverse());
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   useEffect(() => {
     if (user) {
-      loadOrdersData()
+      loadOrdersData();
     }
-  }, [user])
+  }, [user]);
 
   return (
-    <div className='max-padd-container py-16 pt-28 bg-primary'>
+    <div className="max-padd-container py-16 pt-28 bg-primary">
       <Title title1={"Đơn hàng"} title2={"Của Tôi"} titleStyles={"pb-10"} />
       {orders.map((order) => (
-        <div key={order._id} className='bg-white p-2 mt-3 rounded-2xl'>
+        <div key={order._id} className="bg-white p-2 mt-3 rounded-2xl">
           {/* Order Items */}
           {order.items.map((item, idx) => {
-            const priceVNĐ = Number(item.product.price[item.size]).toLocaleString('vi-VN')
+            const priceVNĐ = Number(
+              item.product.price[item.size],
+            ).toLocaleString("vi-VN");
             return (
-              <div key={idx} className='text-gray-600 flex flex-col lg:flex-row gap-4 mb-3'>
-                <div className='flex flex-[2] gap-x-3'>
-                  <div className='flexCenter bg-primary rounded-xl'>
-                    <img src={item.product.images[0]} alt="" className='max-h-20 max-w-20 object-contain' />
+              <div
+                key={idx}
+                className="text-gray-600 flex flex-col lg:flex-row gap-4 mb-3"
+              >
+                <div className="flex flex-[2] gap-x-3">
+                  <div className="flexCenter bg-primary rounded-xl">
+                    <img
+                      src={item.product.images[0]}
+                      alt=""
+                      className="max-h-20 max-w-20 object-contain"
+                    />
                   </div>
-                  <div className='block w-full'>
-                    <h5 className='h5 uppercase line-clamp-1'>{item.product.title}</h5>
-                    <div className='flex flex-wrap gap-3 max-sm:gap-y-1 mt-1'>
-                      <div className='flex items-center gap-x-2'>
-                        <h5 className='medium-14'>Giá:</h5>
+                  <div className="block w-full">
+                    <h5 className="h5 uppercase line-clamp-1">
+                      {item.product.title}
+                    </h5>
+                    <div className="flex flex-wrap gap-3 max-sm:gap-y-1 mt-1">
+                      <div className="flex items-center gap-x-2">
+                        <h5 className="medium-14">Giá:</h5>
                         <p>{priceVNĐ} ₫</p>
                       </div>
-                      <div className='flex items-center gap-x-2'>
-                        <h5 className='medium-14'>Số lượng:</h5>
+                      <div className="flex items-center gap-x-2">
+                        <h5 className="medium-14">Số lượng:</h5>
                         <p>{item.quantity}</p>
                       </div>
-                      <div className='flex items-center gap-x-2'>
-                        <h5 className='medium-14'>Size:</h5>
+                      <div className="flex items-center gap-x-2">
+                        <h5 className="medium-14">Size:</h5>
                         <p>{item.size}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
           {/* Order Summary*/}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-t border-gray-300 pt-3">
-            <div className='flex flex-col gap-2'>
-              <div className='flex items-center gap-x-2'>
-                <h5 className='medium-14'>Mã đơn hàng:</h5>
-                <p className='text-gray-400 text-sm break-all'>{order._id}</p>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-x-2">
+                <h5 className="medium-14">Mã đơn hàng:</h5>
+                <p className="text-gray-400 text-sm break-all">{order._id}</p>
               </div>
-              <div className='flex gap-4'>
-                <div className='flex items-center gap-x-2'>
-                  <h5 className='medium-14'>Trạng thái thanh toán:</h5>
-                  <p className='text-gray-400 text-sm'>{order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}</p>
-                  <div className='flex items-center gap-x-2'>
-                    <h5 className='medium-14'>Phương thức:</h5>
-                    <p className='text-gray-400 text-sm break-all'>{order.paymentMethod === 'COD' ? 'Thanh toán khi nhận hàng' : 'Thanh toán qua Stripe'}</p>
+              <div className="flex gap-4">
+                <div className="flex items-center gap-x-2">
+                  <h5 className="medium-14">Trạng thái thanh toán:</h5>
+                  <p className="text-gray-400 text-sm">
+                    {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
+                  </p>
+                  <div className="flex items-center gap-x-2">
+                    <h5 className="medium-14">Phương thức:</h5>
+                    <p className="text-gray-400 text-sm break-all">
+                      {order.paymentMethod === "COD"
+                        ? "Thanh toán khi nhận hàng"
+                        : "Thanh toán qua Stripe"}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className='flex gap-4'>
-                <div className='flex items-center gap-x-2'>
-                  <h5 className='medium-14'>Ngày:</h5>
-                  <p className='text-gray-400 text-sm'>{new Date(order.createdAt).toLocaleDateString('vi-VN')}</p>
+              <div className="flex gap-4">
+                <div className="flex items-center gap-x-2">
+                  <h5 className="medium-14">Ngày:</h5>
+                  <p className="text-gray-400 text-sm">
+                    {new Date(order.createdAt).toLocaleDateString("vi-VN")}
+                  </p>
                 </div>
-                <div className='flex items-center gap-x-2'>
-                  <h5 className='medium-14'>Tổng tiền:</h5>
-                  <p className='text-gray-400 text-sm break-all'>
-                    {Number(order.amount).toLocaleString('vi-VN')} ₫
+                <div className="flex items-center gap-x-2">
+                  <h5 className="medium-14">Tổng tiền:</h5>
+                  <p className="text-gray-400 text-sm break-all">
+                    {Number(order.amount).toLocaleString("vi-VN")} ₫
                   </p>
                 </div>
               </div>
@@ -98,18 +117,19 @@ const MyOrders = () => {
                 <span className="font-medium">Trạng thái:</span>
                 <div className="flex items-center gap-1 text-sm">
                   <span
-                    className={`min-w-2 h-2 rounded-full ${order.status === "Delivered"
-                      ? "bg-green-500"
-                      : order.status === "Out for delivery"
-                        ? "bg-blue-500"
-                        : order.status === "Shipping"
-                          ? "bg-blue-400"
-                          : order.status === "Packing"
-                            ? "bg-yellow-400"
-                            : order.status === "Order Placed"
-                              ? "bg-gray-400"
-                              : "bg-gray-300"
-                      }`}
+                    className={`min-w-2 h-2 rounded-full ${
+                      order.status === "Delivered"
+                        ? "bg-green-500"
+                        : order.status === "Out for delivery"
+                          ? "bg-blue-500"
+                          : order.status === "Shipping"
+                            ? "bg-blue-400"
+                            : order.status === "Packing"
+                              ? "bg-yellow-400"
+                              : order.status === "Order Placed"
+                                ? "bg-gray-400"
+                                : "bg-gray-300"
+                    }`}
                   />
                   <p>
                     {order.status === "Delivered"
@@ -135,7 +155,7 @@ const MyOrders = () => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default MyOrders
+export default MyOrders;

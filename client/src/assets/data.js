@@ -159,7 +159,6 @@ export const assets = {
   uploadIcon,
 };
 
-
 export const dummyProducts = [
   {
     _id: "1",
@@ -700,8 +699,7 @@ export const dummyProducts = [
     title: "Son Dưỡng Môi",
     images: [product_39],
     price: { "5g": 10, "10g": 18 },
-    description:
-      "Son dưỡng môi mềm mịn, giữ ẩm và làm môi căng bóng tự nhiên.",
+    description: "Son dưỡng môi mềm mịn, giữ ẩm và làm môi căng bóng tự nhiên.",
     category: "Chăm sóc môi",
     type: "Son dưỡng",
     sizes: ["5g", "10g"],
@@ -918,11 +916,10 @@ export const dummyProducts = [
     date: 1716634345448,
     popular: false,
     inStock: true,
-  }
+  },
 ];
 
-
-// Blogs Dummy Data 
+// Blogs Dummy Data
 export const blogs = [
   {
     title: "Top 10 Sản Phẩm Skincare Không Thể Thiếu 2025",
@@ -982,8 +979,6 @@ export const blogs = [
   },
 ];
 
-
-
 export const dummyAddress = [
   {
     _id: "67b5b9e54ea97f71bbc196a0",
@@ -1012,8 +1007,6 @@ export const dummyAddress = [
     phone: "+84-987-654-321",
   },
 ];
-
-
 
 export const dummyOrdersData = [
   {
@@ -1070,10 +1063,9 @@ export const dummyOrdersData = [
   },
 ];
 
-
 // Dashboard Dummy Data
 export const dummyDashboardData = {
-  "totalOrders": 2,
-  "totalRevenue": 897,
-  "orders": dummyOrdersData
-}
+  totalOrders: 2,
+  totalRevenue: 897,
+  orders: dummyOrdersData,
+};

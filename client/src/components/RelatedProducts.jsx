@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import Title from './Title'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import { Autoplay } from 'swiper/modules'
-import { useAppContext } from '../context/AppContext'
-import Item from './Item'
+import React, { useEffect, useState } from "react";
+import Title from "./Title";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Autoplay } from "swiper/modules";
+import { useAppContext } from "../context/AppContext";
+import Item from "./Item";
 
-const RelatedProducts = ({product, productId}) => {
-  const { products } = useAppContext()
-  const [relatedProducts, setRelatedProducts] = useState([])
+const RelatedProducts = ({ product, productId }) => {
+  const { products } = useAppContext();
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {
-    if(products.length > 0){
-        let productsCopy = products.slice()
-        productsCopy = productsCopy.filter((item)=> item.category === product.category && productId !== item._id)
-        setRelatedProducts(productsCopy.slice(0,6));
+    if (products.length > 0) {
+      let productsCopy = products.slice();
+      productsCopy = productsCopy.filter(
+        (item) => item.category === product.category && productId !== item._id,
+      );
+      setRelatedProducts(productsCopy.slice(0, 6));
     }
-    }, [products]);
+  }, [products]);
 
   return (
     <section className="relative my-12 md:my-0 overflow-hidden">
@@ -58,7 +60,7 @@ const RelatedProducts = ({product, productId}) => {
         </Swiper>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default RelatedProducts
+export default RelatedProducts;

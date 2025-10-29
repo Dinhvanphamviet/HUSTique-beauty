@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import Title from './Title'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import { Autoplay } from 'swiper/modules'
-import { useAppContext } from '../context/AppContext'
-import Item from './Item'
+import React, { useEffect, useState } from "react";
+import Title from "./Title";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Autoplay } from "swiper/modules";
+import { useAppContext } from "../context/AppContext";
+import Item from "./Item";
 
 const NewArrivals = () => {
-  const { products } = useAppContext()
-  const [newArrivals, setNewArrivals] = useState([])
+  const { products } = useAppContext();
+  const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
     if (products?.length) {
-      const data = products.filter((item) => item.inStock).slice(0, 10)
-      setNewArrivals(data)
+      const data = products.filter((item) => item.inStock).slice(0, 10);
+      setNewArrivals(data);
     }
-  }, [products])
+  }, [products]);
 
-  if (!newArrivals.length) return null
+  if (!newArrivals.length) return null;
 
   return (
     <section className="relative max-padd-container my-12 md:my-0 overflow-hidden">
@@ -60,7 +60,7 @@ const NewArrivals = () => {
         </Swiper>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default NewArrivals
+export default NewArrivals;

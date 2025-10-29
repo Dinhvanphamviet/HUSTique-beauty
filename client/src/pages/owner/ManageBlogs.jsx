@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useAppContext } from "../../context/AppContext";
 import BlogForm from "../../components/BlogForm";
@@ -16,15 +16,14 @@ export default function ManageBlogs() {
     }
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     if (blogs.length > 0) {
       localStorage.setItem(
         "blog_map",
-        JSON.stringify(Object.fromEntries(blogs.map(b => [b._id, b])))
+        JSON.stringify(Object.fromEntries(blogs.map((b) => [b._id, b]))),
       );
     }
   }, [blogs]);
-
 
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa blog này?")) return;

@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap");
 
 @import "tailwindcss";
 
@@ -27,26 +27,25 @@ body {
   display: none;
 }
 
-
 @layer components {
   .btn-white {
-    @apply text-[14px] font-[500] ring-1 ring-slate-900/10 bg-white px-7 py-3 rounded-full cursor-pointer
+    @apply text-[14px] font-[500] ring-1 ring-slate-900/10 bg-white px-7 py-3 rounded-full cursor-pointer;
   }
 
   .btn-dark {
-    @apply text-[14px] font-[500] bg-black/80 text-white px-7 py-3 rounded-full cursor-pointer
+    @apply text-[14px] font-[500] bg-black/80 text-white px-7 py-3 rounded-full cursor-pointer;
   }
 
   .btn-light {
-    @apply text-[14px] font-[500] bg-primary px-7 py-3 rounded-full hover:bg-white transition-all duration-300 cursor-pointer
+    @apply text-[14px] font-[500] bg-primary px-7 py-3 rounded-full hover:bg-white transition-all duration-300 cursor-pointer;
   }
 
   .btn-outline {
-    @apply text-[14px] font-[500] ring-1 ring-slate-900/10 px-7 py-3 rounded-full hover:bg-primary transition-all duration-300 cursor-pointer
+    @apply text-[14px] font-[500] ring-1 ring-slate-900/10 px-7 py-3 rounded-full hover:bg-primary transition-all duration-300 cursor-pointer;
   }
 
   .btn-secondary {
-    @apply text-[14px] font-[500] bg-secondary text-white px-7 py-3 rounded-full transition-all cursor-pointer
+    @apply text-[14px] font-[500] bg-secondary text-white px-7 py-3 rounded-full transition-all cursor-pointer;
   }
 
   .max-padd-container {
@@ -68,11 +67,9 @@ body {
   .flexEnd {
     @apply flex items-center justify-end;
   }
-
 }
 
 @layer utilities {
-
   .active-link {
     @apply p-2.5 px-4 rounded-full bg-secondary text-white;
   }
@@ -286,6 +283,4 @@ body {
   .bold-13 {
     @apply text-[13px] font-[700];
   }
-
-
 }

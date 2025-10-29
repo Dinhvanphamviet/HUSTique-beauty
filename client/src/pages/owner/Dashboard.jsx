@@ -1,60 +1,75 @@
-import React, { useEffect, useState } from 'react'
-import { useAppContext } from '../../context/AppContext'
-import { assets } from '../../assets/data'
-import toast from 'react-hot-toast'
+import React, { useEffect, useState } from "react";
+import { useAppContext } from "../../context/AppContext";
+import { assets } from "../../assets/data";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
-  const { user, axios, getToken } = useAppContext()
+  const { user, axios, getToken } = useAppContext();
   const [dashboardData, setDashboardData] = useState({
     orders: [],
     totalOrders: 0,
-    totalRevenue: 0, 
-  })
+    totalRevenue: 0,
+  });
 
-  const formatPrice = (price) => Number(price).toLocaleString('vi-VN') + ' ₫'
+  const formatPrice = (price) => Number(price).toLocaleString("vi-VN") + " ₫";
 
-  const getDashboardData = async () => {
+  const getDashboardData = async (forceRefresh = false) => {
+    // Đọc cache từ localStorage nếu có
+    const cached = localStorage.getItem("dashboard_cache");
+    if (cached && !forceRefresh) {
+      const parsed = JSON.parse(cached);
+      setDashboardData(parsed);
+    }
+
     try {
-      const { data } = await axios.get('/api/orders/', {
+      const { data } = await axios.get("/api/orders/", {
         headers: { Authorization: `Bearer ${await getToken()}` },
-      })
+      });
 
       if (data.success) {
-        setDashboardData(data.dashboardData)
+        setDashboardData(data.dashboardData);
+        localStorage.setItem(
+          "dashboard_cache",
+          JSON.stringify(data.dashboardData),
+        );
       } else {
-        toast.error(data.message)
+        toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message)
+      toast.error("Lỗi khi tải dữ liệu dashboard");
     }
-  }
+  };
 
   const statusHandler = async (event, orderId) => {
     try {
       const { data } = await axios.post(
-        '/api/orders/status',
+        "/api/orders/status",
         { orderId, status: event.target.value },
-        { headers: { Authorization: `Bearer ${await getToken()}` } }
-      )
+        { headers: { Authorization: `Bearer ${await getToken()}` } },
+      );
 
       if (data.success) {
-        await getDashboardData()
-        toast.success('Cập nhật trạng thái đơn hàng thành công')
+        await getDashboardData(true); // force refresh khi thay đổi trạng thái
+        toast.success("Cập nhật trạng thái đơn hàng thành công");
       }
     } catch (error) {
-      console.log(error)
-      toast.error('Lỗi khi cập nhật trạng thái đơn hàng')
+      console.log(error);
+      toast.error("Lỗi khi cập nhật trạng thái đơn hàng");
     }
-  }
+  };
 
   useEffect(() => {
-    if (user) getDashboardData()
-  }, [user])
+    if (user) getDashboardData();
+  }, [user]);
 
-  const totalRevenueWithDelivered = dashboardData.totalRevenue + 
+  const totalRevenueWithDelivered =
+    dashboardData.totalRevenue +
     dashboardData.orders
-      .filter(order => order.status === "Delivered" && order.paymentMethod === "COD")
-      .reduce((sum, order) => sum + Number(order.amount || 0), 0)
+      .filter(
+        (order) =>
+          order.status === "Delivered" && order.paymentMethod === "COD",
+      )
+      .reduce((sum, order) => sum + Number(order.amount || 0), 0);
 
   return (
     <div className="md:px-8 py-6 xl:py-8 m-1 sm:m-3 h-[97vh] overflow-y-scroll lg:w-11/12 bg-primary shadow rounded-xl">
@@ -64,7 +79,7 @@ const Dashboard = () => {
           <img src={assets.graph} alt="" className="hidden sm:flex w-8" />
           <div>
             <h4 className="h4">
-              {dashboardData.totalOrders.toString().padStart(2, '0')}
+              {dashboardData.totalOrders.toString().padStart(2, "0")}
             </h4>
             <h5 className="h5 text-secondary">Tổng số đơn hàng</h5>
           </div>
@@ -82,7 +97,6 @@ const Dashboard = () => {
       <div className="bg-primary mt-4">
         {dashboardData.orders.map((order) => (
           <div key={order._id} className="bg-white p-3 mb-4 rounded-2xl">
-            {/* Sản phẩm trong đơn */}
             {order.items.map((item, idx) => (
               <div
                 key={idx}
@@ -93,6 +107,7 @@ const Dashboard = () => {
                     <img
                       src={item.product.images[0]}
                       alt=""
+                      loading="lazy" // ✅ Lazy load ảnh để tăng tốc
                       className="max-h-20 max-w-20 object-contain"
                     />
                   </div>
@@ -142,41 +157,17 @@ const Dashboard = () => {
                 </div>
                 <div className="flex gap-4">
                   <div className="flex items-center gap-x-2">
-                    <h5 className="medium-14">Địa chỉ giao hàng:</h5>
-                    <p className="text-gray-400 text-sm">
-                      {order.address.street}, {order.address.city},{' '}
-                      {order.address.state}, {order.address.country},{' '}
-                      {order.address.zipcode}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="flex items-center gap-x-2">
                     <h5 className="medium-14">Thanh toán:</h5>
                     <p className="text-gray-400 text-sm break-all">
-                      {order.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                      {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
                     </p>
                   </div>
                   <div className="flex items-center gap-x-2">
                     <h5 className="medium-14">Phương thức:</h5>
                     <p className="text-gray-400 text-sm break-all">
-                      {order.paymentMethod === 'COD'
-                        ? 'Thanh toán khi nhận hàng'
-                        : 'Thanh toán qua Stripe'}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="flex items-center gap-x-2">
-                    <h5 className="medium-14">Ngày đặt:</h5>
-                    <p className="text-gray-400 text-sm">
-                      {new Date(order.createdAt).toLocaleDateString('vi-VN')}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-x-2">
-                    <h5 className="medium-14">Tổng tiền:</h5>
-                    <p className="text-gray-400 text-sm break-all">
-                      {formatPrice(order.amount)}
+                      {order.paymentMethod === "COD"
+                        ? "Thanh toán khi nhận hàng"
+                        : "Thanh toán qua Stripe"}
                     </p>
                   </div>
                 </div>
@@ -201,7 +192,7 @@ const Dashboard = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

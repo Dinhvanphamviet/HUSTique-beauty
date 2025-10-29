@@ -12,7 +12,7 @@ export default function Contact() {
         </h1>
 
         <p className="text-gray-500 text-center max-w-md px-5 pb-10 leading-relaxed text-sm">
-           Hoặc bạn có thể liên hệ trực tiếp qua email {" "}
+          Hoặc bạn có thể liên hệ trực tiếp qua email{" "}
           <a
             href="#"
             className="text-rose-500 hover:underline hover:text-rose-600 transition"
@@ -25,7 +25,7 @@ export default function Contact() {
         <div className="max-w-md w-full px-6">
           {/* Name */}
           <label htmlFor="name" className="font-medium text-sm">
-             Họ và tên
+            Họ và tên
           </label>
           <div className="flex items-center mt-2 mb-6 h-11 pl-3 border border-slate-300/70 rounded-full bg-white focus-within:ring-2 focus-within:ring-rose-200 transition-all">
             <svg

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { assets } from '../assets/data'
+import React, { useState, useEffect } from "react";
+import { assets } from "../assets/data";
 
 function Feature() {
   const imageList = [
@@ -7,18 +7,18 @@ function Feature() {
     assets.features2,
     assets.features3,
     assets.features4,
-  ]
+  ];
 
-  const [index1, setIndex1] = useState(0)
-  const [index2, setIndex2] = useState(1)
+  const [index1, setIndex1] = useState(0);
+  const [index2, setIndex2] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex1(prev => (prev + 1) % imageList.length)
-      setIndex2(prev => (prev + 1) % imageList.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [imageList.length])
+      setIndex1((prev) => (prev + 1) % imageList.length);
+      setIndex2((prev) => (prev + 1) % imageList.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [imageList.length]);
 
   return (
     <section className="max-padd-container my-16 relative overflow-hidden font-['Noto_Serif_JP',serif]">
@@ -72,7 +72,7 @@ function Feature() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Feature
+export default Feature;

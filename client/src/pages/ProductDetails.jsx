@@ -1,61 +1,61 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import ProductDescription from '../components/ProductDescription'
-import ProductFeatures from '../components/ProductFeatures'
-import RelatedProducts from '../components/RelatedProducts'
-import { useAppContext } from '../context/AppContext'
-import { assets } from '../assets/data'
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import ProductDescription from "../components/ProductDescription";
+import ProductFeatures from "../components/ProductFeatures";
+import RelatedProducts from "../components/RelatedProducts";
+import { useAppContext } from "../context/AppContext";
+import { assets } from "../assets/data";
 import { useUser, useClerk } from "@clerk/clerk-react";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import CommentSection from "../components/CommentSection";
 
 const ProductDetails = () => {
-  const { products, addToCart, axios } = useAppContext()
-  const [image, setImage] = useState(null)
-  const [size, setSize] = useState(null)
-  const [avgRating, setAvgRating] = useState(0)
-  const [commentCount, setCommentCount] = useState(0)
+  const { products, addToCart, axios } = useAppContext();
+  const [image, setImage] = useState(null);
+  const [size, setSize] = useState(null);
+  const [avgRating, setAvgRating] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
 
-  const { productId } = useParams()
-  const product = products.find((item) => item._id === productId)
+  const { productId } = useParams();
+  const product = products.find((item) => item._id === productId);
   const { isSignedIn } = useUser();
   const { openSignIn } = useClerk();
 
   useEffect(() => {
     if (product) {
-      setImage(product.images[0])
-      setSize(product.sizes[0])
+      setImage(product.images[0]);
+      setSize(product.sizes[0]);
     }
-  }, [product])
+  }, [product]);
 
   // Fetch comments để lấy rating trung bình và số lượng đánh giá
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`/api/comments/${productId}`)
+        const res = await axios.get(`/api/comments/${productId}`);
         if (res.data.success) {
-          const comments = res.data.comments
-          const count = comments.length
+          const comments = res.data.comments;
+          const count = comments.length;
           const avg =
             count > 0
               ? comments.reduce((sum, c) => sum + (c.rating || 0), 0) / count
-              : 0
+              : 0;
 
-          setAvgRating(avg.toFixed(1))
-          setCommentCount(count)
+          setAvgRating(avg.toFixed(1));
+          setCommentCount(count);
         }
       } catch (error) {
-        console.error("Lỗi khi lấy đánh giá:", error)
+        console.error("Lỗi khi lấy đánh giá:", error);
       }
-    }
+    };
 
-    if (productId) fetchComments()
-  }, [productId, axios])
+    if (productId) fetchComments();
+  }, [productId, axios]);
 
   // Format giá VNĐ
   const formatPrice = (price) => {
-    return Number(price).toLocaleString('vi-VN') + ' ₫'
-  }
+    return Number(price).toLocaleString("vi-VN") + " ₫";
+  };
 
   return (
     product && (
@@ -102,7 +102,9 @@ const ProductDetails = () => {
                     src={assets.star}
                     alt=""
                     width={19}
-                    className={i < Math.round(avgRating) ? "opacity-100" : "opacity-30"}
+                    className={
+                      i < Math.round(avgRating) ? "opacity-100" : "opacity-30"
+                    }
                   />
                 ))}
               </div>
@@ -128,10 +130,11 @@ const ProductDetails = () => {
                   <button
                     key={i}
                     onClick={() => setSize(item)}
-                    className={`${item === size
-                      ? 'bg-[#f8c8dc] text-[#d63384] shadow-md'
-                      : 'bg-white text-gray-600'
-                      } font-medium h-9 w-20 rounded-full ring-1 ring-pink-200 transition-all hover:scale-105`}
+                    className={`${
+                      item === size
+                        ? "bg-[#f8c8dc] text-[#d63384] shadow-md"
+                        : "bg-white text-gray-600"
+                    } font-medium h-9 w-20 rounded-full ring-1 ring-pink-200 transition-all hover:scale-105`}
                   >
                     {item}
                   </button>
@@ -144,7 +147,9 @@ const ProductDetails = () => {
               <button
                 onClick={() => {
                   if (!isSignedIn) {
-                    toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+                    toast.error(
+                      "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!",
+                    );
                     openSignIn();
                     return;
                   }
@@ -163,7 +168,9 @@ const ProductDetails = () => {
 
             <div className="flex items-center gap-x-2 mt-3 text-gray-600">
               <img src={assets.delivery} alt="" width={17} />
-              <span className="text-sm">Miễn phí giao hàng cho đơn từ 500.000 ₫</span>
+              <span className="text-sm">
+                Miễn phí giao hàng cho đơn từ 500.000 ₫
+              </span>
             </div>
 
             <hr className="my-4 w-2/3 border-pink-200" />
@@ -200,7 +207,7 @@ const ProductDetails = () => {
         </div>
       </div>
     )
-  )
-}
+  );
+};
 
-export default ProductDetails
+export default ProductDetails;
