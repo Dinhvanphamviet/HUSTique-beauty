@@ -4,14 +4,18 @@ import { useAppContext } from "../../context/AppContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import EditProductModal from "@/components/EditProductModal";
 import { useState } from "react";
+import AddProductModal from "@/components/AddProductModal";
 
 
-const ListProduct = () => {
+
+const ManageProduct = () => {
   const { products, currency, fetchProducts, axios, getToken } =
     useAppContext();
 
   const formatPrice = (price) => Number(price).toLocaleString("vi-VN") + " ₫";
   const [editingProduct, setEditingProduct] = useState(null);
+
+  const [showAddModal, setShowAddModal] = useState(false);
 
 
   const toggleStock = async (productId, inStock) => {
@@ -50,9 +54,21 @@ const ListProduct = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-primary px-4 py-6 lg:w-11/12 rounded-xl mx-auto">
-      {/* Header cố định */}
-      <div className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_1.5fr] items-center py-4 px-2 bg-secondary text-white font-semibold text-sm rounded-t-xl shadow-md">
+    <div className="h-screen flex flex-col bg-primary px-2 sm:px-6 py-12 lg:w-11/12 rounded-xl mx-auto">
+      {/* Header trên cùng */}
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-semibold text-gray-800">Quản lý sản phẩm</h1>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          Thêm sản phẩm
+        </button>
+
+      </div>
+
+      {/* Header cố định các cột */}
+      <div className="grid grid-cols-[1fr_3.5fr_1.5fr_1.5fr_1fr_1.5fr] items-center py-4 px-2 bg-secondary text-white font-semibold text-sm rounded-t-xl shadow-md sticky top-0 z-10">
         <h5>Hình ảnh</h5>
         <h5>Tên sản phẩm</h5>
         <h5>Danh mục sản phẩm</h5>
@@ -61,7 +77,7 @@ const ListProduct = () => {
         <h5>Hành động</h5>
       </div>
 
-      {/* Danh sách sản phẩm cuộn riêng */}
+      {/* Danh sách sản phẩm cuộn */}
       <ScrollArea className="flex-1 bg-white/80 rounded-b-xl shadow-inner border-t-0">
         <div className="flex flex-col gap-2 p-3">
           {products.map((product) => (
@@ -74,12 +90,8 @@ const ListProduct = () => {
                 alt=""
                 className="w-12 h-12 object-cover rounded"
               />
-              <h5 className="text-sm font-semibold truncate">
-                {product.title}
-              </h5>
-              <p className="text-sm font-medium text-gray-600">
-                {product.category}
-              </p>
+              <h5 className="text-sm font-semibold truncate">{product.title}</h5>
+              <p className="text-sm font-medium text-gray-600">{product.category}</p>
               <div className="text-sm font-semibold text-gray-700">
                 {formatPrice(product.price[product.sizes[0]])}
               </div>
@@ -104,7 +116,10 @@ const ListProduct = () => {
                 >
                   Xem
                 </a>
-                <button onClick={() => setEditingProduct(product)} className="bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition">
+                <button
+                  onClick={() => setEditingProduct(product)}
+                  className="bg-blue-500 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-600 transition"
+                >
                   Sửa
                 </button>
                 <button
@@ -118,6 +133,7 @@ const ListProduct = () => {
           ))}
         </div>
       </ScrollArea>
+
       {editingProduct && (
         <EditProductModal
           product={editingProduct}
@@ -125,10 +141,18 @@ const ListProduct = () => {
           onUpdated={fetchProducts}
         />
       )}
+      {showAddModal && (
+        <AddProductModal
+          onClose={() => setShowAddModal(false)}
+          onSaved={() => {
+            setShowAddModal(false);
+            fetchProducts(); 
+          }}
+        />
+      )}
 
     </div>
-
   );
 };
 
-export default ListProduct;
+export default ManageProduct;

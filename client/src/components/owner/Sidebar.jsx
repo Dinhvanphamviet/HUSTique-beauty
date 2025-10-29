@@ -20,13 +20,8 @@ const Sidebar = () => {
       icon: <FaTachometerAlt />,
     },
     {
-      path: "/owner/add-product",
-      label: "Thêm sản phẩm",
-      icon: <FaPlusSquare />,
-    },
-    {
-      path: "/owner/list-product",
-      label: "Danh sách sản phẩm",
+      path: "/owner/manage-product",
+      label: "Quản lý sản phẩm",
       icon: <FaListUl />,
     },
     {

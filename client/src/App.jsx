@@ -13,8 +13,8 @@ import AddressForm from "./pages/AddressForm";
 import MyOrders from "./pages/MyOrders";
 import { Toaster } from "react-hot-toast";
 import Dashboard from "./pages/owner/Dashboard";
-import AddProduct from "./pages/owner/AddProduct";
-import ListProduct from "./pages/owner/ListProduct";
+import AddProductModal from "./components/AddProductModal";
+import ManageProduct from "@/pages/owner/ManageProduct";
 import Sidebar from "./components/owner/Sidebar";
 import ManageBlogs from "./pages/owner/ManageBlogs";
 import BlogDetail from "./pages/BlogDetail";
@@ -42,8 +42,8 @@ function App() {
         <Route path="/processing/:nextUrl" element={<Processing />} />
         <Route path="/owner" element={<Sidebar />}>
           <Route index element={<Dashboard />} />
-          <Route path="add-product" element={<AddProduct />} />
-          <Route path="list-product" element={<ListProduct />} />
+          <Route path="add-product" element={<AddProductModal />} />
+          <Route path="manage-product" element={<ManageProduct />} />
           <Route path="manage-blogs" element={<ManageBlogs />} />
         </Route>
       </Routes>
