@@ -79,18 +79,25 @@ export const deleteProduct = async (req, res) => {
 };
 
 
-// Controller Function for Update Product [PUT '/:id']
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const productData = JSON.parse(req.body.productData || "{}");
     const files = req.files;
 
+    // Lấy sản phẩm hiện tại
+    const product = await Product.findById(id);
+    if (!product) return res.status(404).json({ success: false, message: "Sản phẩm không tồn tại" });
+
     let updateFields = { ...productData };
 
-    // Nếu có file ảnh mới thì upload lên Cloudinary
+    // Lấy ảnh cũ mà client muốn giữ lại
+    const keptOldImages = productData.oldImages || [];
+
+    // Upload ảnh mới lên Cloudinary
+    let newImagesUrls = [];
     if (files && files.length > 0) {
-      const imagesUrl = await Promise.all(
+      newImagesUrls = await Promise.all(
         files.map(async (file) => {
           const result = await cloudinary.uploader.upload(file.path, {
             resource_type: "image",
@@ -98,16 +105,21 @@ export const updateProduct = async (req, res) => {
           return result.secure_url;
         })
       );
-      updateFields.images = imagesUrl;
     }
 
+    // Kết hợp ảnh cũ + ảnh mới
+    updateFields.images = [...keptOldImages, ...newImagesUrls];
+
+    // Cập nhật sản phẩm
     await Product.findByIdAndUpdate(id, updateFields, { new: true });
+
     res.json({ success: true, message: "Cập nhật sản phẩm thành công!" });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
   }
 };
+
 
 
 
