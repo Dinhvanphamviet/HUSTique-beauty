@@ -27,7 +27,7 @@ app.post('/api/stripe', express.raw({type: "application/json"}), stripeWebhooks)
 
 app.use(express.json()) //Enable JSON body parsing
 
-app.use(clerkMiddleware()) //Enable Clerk middleware for authentication
+{/*app.use(clerkMiddleware()) */}//Enable Clerk middleware for authentication
 
 //API to listen Clerk Webhooks
 app.use("/api/clerk", clerkWebhooks)
