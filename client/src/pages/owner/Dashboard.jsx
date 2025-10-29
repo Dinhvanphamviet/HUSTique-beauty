@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { assets } from "../../assets/data";
 import toast from "react-hot-toast";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Dashboard = () => {
   const { user, axios, getToken } = useAppContext();
@@ -14,7 +15,6 @@ const Dashboard = () => {
   const formatPrice = (price) => Number(price).toLocaleString("vi-VN") + " ₫";
 
   const getDashboardData = async (forceRefresh = false) => {
-    // Đọc cache từ localStorage nếu có
     const cached = localStorage.getItem("dashboard_cache");
     if (cached && !forceRefresh) {
       const parsed = JSON.parse(cached);
@@ -30,7 +30,7 @@ const Dashboard = () => {
         setDashboardData(data.dashboardData);
         localStorage.setItem(
           "dashboard_cache",
-          JSON.stringify(data.dashboardData),
+          JSON.stringify(data.dashboardData)
         );
       } else {
         toast.error(data.message);
@@ -45,15 +45,14 @@ const Dashboard = () => {
       const { data } = await axios.post(
         "/api/orders/status",
         { orderId, status: event.target.value },
-        { headers: { Authorization: `Bearer ${await getToken()}` } },
+        { headers: { Authorization: `Bearer ${await getToken()}` } }
       );
 
       if (data.success) {
-        await getDashboardData(true); // force refresh khi thay đổi trạng thái
+        await getDashboardData(true);
         toast.success("Cập nhật trạng thái đơn hàng thành công");
       }
     } catch (error) {
-      console.log(error);
       toast.error("Lỗi khi cập nhật trạng thái đơn hàng");
     }
   };
@@ -67,14 +66,14 @@ const Dashboard = () => {
     dashboardData.orders
       .filter(
         (order) =>
-          order.status === "Delivered" && order.paymentMethod === "COD",
+          order.status === "Delivered" && order.paymentMethod === "COD"
       )
       .reduce((sum, order) => sum + Number(order.amount || 0), 0);
 
   return (
-    <div className="md:px-8 py-6 xl:py-8 m-1 sm:m-3 h-[97vh] overflow-y-scroll lg:w-11/12 bg-primary shadow rounded-xl">
-      {/* Tổng quan */}
-      <div className="grid grid-cols-2 gap-4">
+    <div className="md:px-8 py-6 xl:py-8 m-1 sm:m-3 h-[97vh] lg:w-11/12 bg-primary shadow rounded-xl flex flex-col">
+      {/* Tổng quan cố định */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="flexStart gap-7 p-5 bg-[#fff4d2] lg:min-w-56 rounded-xl">
           <img src={assets.graph} alt="" className="hidden sm:flex w-8" />
           <div>
@@ -93,10 +92,10 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Danh sách đơn hàng */}
-      <div className="bg-primary mt-4">
+      {/* Danh sách đơn hàng cuộn */}
+      <ScrollArea className="flex-1 bg-primary rounded-xl p-2">
         {dashboardData.orders.map((order) => (
-          <div key={order._id} className="bg-white p-3 mb-4 rounded-2xl">
+          <div key={order._id} className="bg-white p-3 mb-4 rounded-2xl hover:shadow-md transition">
             {order.items.map((item, idx) => (
               <div
                 key={idx}
@@ -107,7 +106,7 @@ const Dashboard = () => {
                     <img
                       src={item.product.images[0]}
                       alt=""
-                      loading="lazy" // ✅ Lazy load ảnh để tăng tốc
+                      loading="lazy"
                       className="max-h-20 max-w-20 object-contain"
                     />
                   </div>
@@ -134,7 +133,6 @@ const Dashboard = () => {
               </div>
             ))}
 
-            {/* Tóm tắt đơn hàng */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-t border-gray-300 pt-3">
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-x-2">
@@ -190,7 +188,7 @@ const Dashboard = () => {
             </div>
           </div>
         ))}
-      </div>
+      </ScrollArea>
     </div>
   );
 };
