@@ -2,15 +2,13 @@ import toast from 'react-hot-toast'
 import { useAppContext } from '../context/AppContext'
 import React, { useState, useEffect, useRef } from 'react'
 
-
 const CartTotal = () => {
-  const { navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, getCartCount, getCartAmount, axios, user, getToken, products } = useAppContext()
+  const {navigate, currency, cartItems, setCartItems, method, setMethod, delivery_charges, getCartCount, getCartAmount, axios, user, getToken, products} = useAppContext()
 
   const [addresses, setAddresses] = useState([])
   const [showAddress, setShowAddress] = useState(false)
   const [selectAddress, setSelectAddress] = useState(null)
   const addressRef = useRef(null)
-
 
   // Lấy danh sách địa chỉ
   const getAddress = async () => {
@@ -19,9 +17,7 @@ const CartTotal = () => {
         const { data } = await axios.get("/api/addresses", { headers: { Authorization: `Bearer ${await getToken()}` } })
         if (data.success) {
           setAddresses(data.addresses)
-          if (data.addresses.length > 0) {
-            setSelectAddress(data.addresses[0])
-          }
+          if (data.addresses.length > 0) setSelectAddress(data.addresses[0])
         } else {
           toast.error(data.message)
         }
@@ -36,16 +32,11 @@ const CartTotal = () => {
       const { data } = await axios.delete(`/api/addresses/${id}`, {
         headers: { Authorization: `Bearer ${await getToken()}` },
       })
-
       if (data.success) {
         toast.success("Đã xóa địa chỉ nhận hàng")
-        setAddresses((prev) => prev.filter((addr) => addr._id !== id))
-        if (selectAddress && selectAddress._id === id) {
-          setSelectAddress(null)
-        }
-      } else {
-        toast.error(data.message)
-      }
+        setAddresses(prev => prev.filter(addr => addr._id !== id))
+        if (selectAddress?._id === id) setSelectAddress(null)
+      } else toast.error(data.message)
     } catch (error) {
       toast.error(error.message)
     }
@@ -56,11 +47,11 @@ const CartTotal = () => {
     try {
       if (!selectAddress) return toast.error("Vui lòng chọn địa chỉ")
 
-      let orderItems = []
+      const orderItems = []
       for (const itemId in cartItems) {
         for (const size in cartItems[itemId]) {
           if (cartItems[itemId][size] > 0) {
-            const itemInfo = structuredClone(products.find((product) => product._id === itemId))
+            const itemInfo = structuredClone(products.find(p => p._id === itemId))
             if (itemInfo) {
               itemInfo.size = size
               itemInfo.quantity = cartItems[itemId][size]
@@ -70,13 +61,14 @@ const CartTotal = () => {
         }
       }
 
-      let items = orderItems.map((item) => ({
+      if (orderItems.length === 0) return toast.error("Giỏ hàng trống")
+
+      const items = orderItems.map(item => ({
         product: item._id,
         quantity: item.quantity,
-        size: item.size,
+        size: item.size
       }))
 
-      // Thanh toán
       if (method === "COD") {
         const { data } = await axios.post(
           "/api/orders/cod",
@@ -87,20 +79,15 @@ const CartTotal = () => {
           toast.success(data.message)
           setCartItems({})
           navigate('/my-orders')
-        } else {
-          toast.error(data.message)
-        }
+        } else toast.error(data.message)
       } else {
         const { data } = await axios.post(
           "/api/orders/stripe",
           { items, address: selectAddress._id },
           { headers: { Authorization: `Bearer ${await getToken()}` } }
         )
-        if (data.success) {
-          window.location.replace(data.url)
-        } else {
-          toast.error(data.message)
-        }
+        if (data.success) window.location.replace(data.url)
+        else toast.error(data.message)
       }
     } catch (error) {
       toast.error(error.message)
@@ -113,19 +100,17 @@ const CartTotal = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (addressRef.current && !addressRef.current.contains(event.target)) {
-        setShowAddress(false)
-      }
+      if (addressRef.current && !addressRef.current.contains(event.target)) setShowAddress(false)
     }
-
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   // Tính toán
   const subtotal = getCartAmount()
+  const shippingFee = getCartCount() > 0 ? delivery_charges : 0
   const taxAmount = Math.round(subtotal * 0.02)
-  const totalAmount = subtotal + delivery_charges + taxAmount
+  const totalAmount = subtotal + shippingFee + taxAmount
 
   return (
     <div>
@@ -216,7 +201,7 @@ const CartTotal = () => {
         </div>
         <div className='flex justify-between'>
           <h5 className='h5'>Phí vận chuyển</h5>
-          <p className='font-bold'>{delivery_charges.toLocaleString('vi-VN')} {currency}</p>
+          <p className='font-bold'>{shippingFee.toLocaleString('vi-VN')} {currency}</p>
         </div>
         <div className='flex justify-between'>
           <h5 className='h5'>Thuế (2%)</h5>
