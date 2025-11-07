@@ -13,13 +13,18 @@ import orderRouter from "./routes/orderRoute.js";
 import blogRouter from "./routes/blogRoute.js";
 import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
 import commentRouter from "./routes/commentRoute.js";
+import chatbotRouter from "./routes/chatbotRoute.js";
 
 
 await connectDB() //Connect to MongoDB
 await connectCloudinary() //Setup Cloudinary
 
+
 const app = express() //Init express app
 app.use(cors()) //Enable Cross-Origin Resource Sharing
+
+
+
 
 
 //API to listen to stripe webhooks
@@ -41,6 +46,7 @@ app.use("/api/cart", cartRouter)
 app.use("/api/orders", orderRouter)
 app.use("/api/blogs", blogRouter);
 app.use("/api/comments", commentRouter);
+app.use("/api/chatbot", chatbotRouter); 
 
 
 

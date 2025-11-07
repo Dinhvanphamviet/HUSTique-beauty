@@ -1,9 +1,10 @@
+// client/src/App.jsx
 import React, { use } from "react";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import { Routes, Route } from "react-router-dom";
-import { Router } from "react-router-dom";
+// import { Router } from "react-router-dom"; // Dòng này có thể bị thừa (Router)
 import Footer from "./components/Footer";
 import Blog from "./pages/Blog";
 import ProductDetails from "./pages/ProductDetails";
@@ -20,6 +21,7 @@ import ManageBlogs from "./pages/owner/ManageBlogs";
 import BlogDetail from "./pages/BlogDetail";
 import { useLocation } from "react-router-dom";
 import Processing from "./pages/Processing";
+import ChatbotWidget from "./components/ChatbotWidget";
 
 function App() {
   const location = useLocation();
@@ -30,6 +32,7 @@ function App() {
       {!isOwnerPath && <Header />}
       <Toaster position="bottom-right" />
       <Routes>
+        {/* ... (Toàn bộ các Route của bạn giữ nguyên) ... */}
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />
         <Route path="/collection/:productId" element={<ProductDetails />} />
@@ -48,6 +51,8 @@ function App() {
         </Route>
       </Routes>
       {!isOwnerPath && <Footer />}
+      
+      <ChatbotWidget /> 
     </main>
   );
 }
