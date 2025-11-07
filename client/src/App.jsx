@@ -51,8 +51,7 @@ function App() {
         </Route>
       </Routes>
       {!isOwnerPath && <Footer />}
-      
-      <ChatbotWidget /> 
+      {!isOwnerPath && <ChatbotWidget />}
     </main>
   );
 }
