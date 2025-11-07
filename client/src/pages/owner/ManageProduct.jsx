@@ -37,7 +37,6 @@ const ManageProduct = () => {
   };
 
   const deleteProduct = async (productId) => {
-    if (!window.confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
     try {
       const { data } = await axios.delete(`/api/products/${productId}`, {
         headers: { Authorization: `Bearer ${await getToken()}` },

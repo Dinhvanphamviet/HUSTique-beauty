@@ -8,6 +8,9 @@ export const createProduct = async (req,res)=>{
         const productData = JSON.parse(req.body.productData)
         const images = req.files
 
+        console.log("👉 productData:", productData)
+
+
         // Upload images to cloudinary
         const imagesUrl = await Promise.all(
             images.map( async (item) => {

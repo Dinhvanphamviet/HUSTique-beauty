@@ -5,10 +5,11 @@ import MDEditor from "@uiw/react-md-editor";
 import { motion } from "framer-motion";
 
 const EditProductModal = ({ product, onClose, onUpdated }) => {
-    const { axios, getToken } = useAppContext();
+    const { axios, getToken, fetchProducts } = useAppContext();
     const [inputs, setInputs] = useState({
         title: product.title,
         description: product.description,
+        detailedDescription: product.detailedDescription || "",
         category: product.category,
         type: product.type,
         popular: product.popular,
@@ -74,6 +75,7 @@ const EditProductModal = ({ product, onClose, onUpdated }) => {
             const updatedProduct = {
                 title: inputs.title,
                 description: inputs.description,
+                detailedDescription: inputs.detailedDescription,
                 category: inputs.category,
                 type: inputs.type,
                 popular: inputs.popular,
@@ -92,6 +94,7 @@ const EditProductModal = ({ product, onClose, onUpdated }) => {
 
             if (data.success) {
                 toast.success("Cập nhật sản phẩm thành công!");
+                await fetchProducts();
                 onUpdated();
                 onClose();
             } else toast.error(data.message);
@@ -129,12 +132,25 @@ const EditProductModal = ({ product, onClose, onUpdated }) => {
 
                     {/* Mô tả */}
                     <div data-color-mode="light">
-                        <label className="font-medium">Mô tả sản phẩm</label>
+                        <label className="font-medium">Mô tả ngắn</label>
                         <div className="border rounded-lg bg-white mt-1">
                             <MDEditor
                                 value={inputs.description}
                                 onChange={(v) => setInputs({ ...inputs, description: v })}
                                 height={200}
+                                preview="edit"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Mô tả chi tiết */}
+                    <div data-color-mode="light">
+                        <label className="font-medium">Mô tả chi tiết</label>
+                        <div className="border rounded-lg bg-white mt-1">
+                            <MDEditor
+                                value={inputs.detailedDescription}
+                                onChange={(v) => setInputs({ ...inputs, detailedDescription: v })}
+                                height={250}
                                 preview="edit"
                             />
                         </div>

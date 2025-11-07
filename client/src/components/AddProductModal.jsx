@@ -5,7 +5,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { motion } from "framer-motion";
 
 const AddProductModal = ({ onClose, onSaved }) => {
-  const { axios, getToken } = useAppContext();
+const { axios, getToken, fetchProducts } = useAppContext();
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -60,12 +60,14 @@ const AddProductModal = ({ onClose, onSaved }) => {
       const productData = {
         title: inputs.title,
         description: inputs.description,
+        detailedDescription: inputs.detailedDescription,
         category: inputs.category,
         type: inputs.type,
         popular: inputs.popular,
         price: prices,
         sizes,
       };
+      
 
       formData.append("productData", JSON.stringify(productData));
       images.forEach(img => formData.append("images", img));
@@ -76,6 +78,7 @@ const AddProductModal = ({ onClose, onSaved }) => {
 
       if (data.success) {
         toast.success("Thêm sản phẩm thành công!");
+        await fetchProducts();
         setInputs({ title: "", description: "", category: "", type: "", popular: false });
         setSizePrices([]);
         setImages([]);
@@ -102,13 +105,13 @@ const AddProductModal = ({ onClose, onSaved }) => {
       >
         <h2 className="text-xl font-semibold mb-4 text-center">Thêm sản phẩm</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 text-sm">
-          
+
           {/* Tên sản phẩm */}
           <div>
             <label className="font-medium">Tên sản phẩm</label>
             <input
               value={inputs.title}
-              onChange={e => setInputs({...inputs, title: e.target.value})}
+              onChange={e => setInputs({ ...inputs, title: e.target.value })}
               className="w-full border rounded-lg px-3 py-2 mt-1"
               placeholder="Nhập tên sản phẩm"
             />
@@ -116,16 +119,30 @@ const AddProductModal = ({ onClose, onSaved }) => {
 
           {/* Mô tả */}
           <div data-color-mode="light">
-            <label className="font-medium">Mô tả sản phẩm</label>
+            <label className="font-medium">Mô tả ngắn</label>
             <div className="border rounded-lg bg-white mt-1">
               <MDEditor
                 value={inputs.description}
-                onChange={v => setInputs({...inputs, description: v})}
+                onChange={v => setInputs({ ...inputs, description: v })}
                 height={200}
                 preview="edit"
               />
             </div>
           </div>
+
+          {/* Mô tả chi tiết */}
+          <div data-color-mode="light">
+            <label className="font-medium">Mô tả chi tiết</label>
+            <div className="border rounded-lg bg-white mt-1">
+              <MDEditor
+                value={inputs.detailedDescription}
+                onChange={v => setInputs({ ...inputs, detailedDescription: v })}
+                height={250}
+                preview="edit"
+              />
+            </div>
+          </div>
+
 
           {/* Danh mục & loại */}
           <div className="flex gap-4">
@@ -133,7 +150,7 @@ const AddProductModal = ({ onClose, onSaved }) => {
               <label className="font-medium">Danh mục</label>
               <select
                 value={inputs.category}
-                onChange={e => setInputs({...inputs, category: e.target.value})}
+                onChange={e => setInputs({ ...inputs, category: e.target.value })}
                 className="border rounded-lg px-3 py-2 w-full mt-1"
               >
                 <option value="">-- Chọn danh mục --</option>
@@ -144,7 +161,7 @@ const AddProductModal = ({ onClose, onSaved }) => {
               <label className="font-medium">Loại sản phẩm</label>
               <select
                 value={inputs.type}
-                onChange={e => setInputs({...inputs, type: e.target.value})}
+                onChange={e => setInputs({ ...inputs, type: e.target.value })}
                 className="border rounded-lg px-3 py-2 w-full mt-1"
               >
                 <option value="">-- Chọn loại --</option>
@@ -177,10 +194,10 @@ const AddProductModal = ({ onClose, onSaved }) => {
             </div>
 
             <div className="mt-2 space-y-1">
-              {sizePrices.map((sp,i) => (
+              {sizePrices.map((sp, i) => (
                 <div key={i} className="flex items-center justify-between w-64 bg-white p-1 px-2 rounded-lg ring-1 ring-slate-900/10">
                   <span>{sp.size}: {sp.price.toLocaleString()}₫</span>
-                  <button type="button" onClick={()=>removeSizePrice(sp.size)} className="text-red-500 hover:underline text-sm">Xóa</button>
+                  <button type="button" onClick={() => removeSizePrice(sp.size)} className="text-red-500 hover:underline text-sm">Xóa</button>
                 </div>
               ))}
             </div>
@@ -190,16 +207,16 @@ const AddProductModal = ({ onClose, onSaved }) => {
           <div>
             <label className="font-medium">Ảnh sản phẩm</label>
             <div className="flex flex-wrap gap-3 mt-2">
-              {images.map((file,i)=>(
+              {images.map((file, i) => (
                 <div key={i} className="relative">
-                  <img src={URL.createObjectURL(file)} alt="" className="w-32 h-32 object-cover rounded-lg border"/>
-                  <button type="button" onClick={()=>removeImage(i)} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs">×</button>
+                  <img src={URL.createObjectURL(file)} alt="" className="w-32 h-32 object-cover rounded-lg border" />
+                  <button type="button" onClick={() => removeImage(i)} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs">×</button>
                 </div>
               ))}
               {images.length < 4 && (
                 <label className="w-32 h-32 border-2 border-dashed rounded-lg flex items-center justify-center cursor-pointer text-gray-400 text-3xl">
                   +
-                  <input type="file" accept="image/*" hidden onChange={e=>setImages([...images,...Array.from(e.target.files)])} multiple/>
+                  <input type="file" accept="image/*" hidden onChange={e => setImages([...images, ...Array.from(e.target.files)])} multiple />
                 </label>
               )}
             </div>
@@ -207,7 +224,7 @@ const AddProductModal = ({ onClose, onSaved }) => {
 
           {/* Nổi bật */}
           <div className="flex items-center gap-2">
-            <input type="checkbox" checked={inputs.popular} onChange={e=>setInputs({...inputs,popular:e.target.checked})}/>
+            <input type="checkbox" checked={inputs.popular} onChange={e => setInputs({ ...inputs, popular: e.target.checked })} />
             <span>Thêm vào danh mục nổi bật</span>
           </div>
 

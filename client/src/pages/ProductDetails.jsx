@@ -130,11 +130,10 @@ const ProductDetails = () => {
                   <button
                     key={i}
                     onClick={() => setSize(item)}
-                    className={`${
-                      item === size
-                        ? "bg-[#f8c8dc] text-[#d63384] shadow-md"
-                        : "bg-white text-gray-600"
-                    } font-medium h-9 w-20 rounded-full ring-1 ring-pink-200 transition-all hover:scale-105`}
+                    className={`${item === size
+                      ? "bg-[#f8c8dc] text-[#d63384] shadow-md"
+                      : "bg-white text-gray-600"
+                      } font-medium h-9 w-20 rounded-full ring-1 ring-pink-200 transition-all hover:scale-105`}
                   >
                     {item}
                   </button>
@@ -184,7 +183,7 @@ const ProductDetails = () => {
         </div>
 
         {/* Description & Features */}
-        <ProductDescription description={product.description} />
+        <ProductDescription detailedDescription={product.detailedDescription} />
         <ProductFeatures />
 
         {/* Comment Section */}
