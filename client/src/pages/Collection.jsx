@@ -15,7 +15,7 @@ const Collection = () => {
 
   //Predefined Categories list
   const allCategories = useMemo(
-    () => ["Chăm sóc tóc", "Chăm sóc cơ thể", "Chăm sóc da mặt"],
+    () => ["Chăm sóc tóc", "Chăm sóc cơ thể", "Chăm sóc da mặt", "Chăm sóc môi"],
     [],
   );
 

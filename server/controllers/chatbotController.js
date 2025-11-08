@@ -1,8 +1,6 @@
-// server/controllers/chatbotController.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Product from "../models/Product.js";
 
-// Sử dụng model ổn định
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
@@ -36,7 +34,8 @@ export const handleChat = async (req, res) => {
         - Tên: ${exactProduct.title}
         - Giá: ${exactProduct.price} VNĐ
         - Tình trạng: ${exactProduct.inStock ? "Còn hàng" : "Hết hàng"}
-        - Mô tả chi tiết: ${exactProduct.detailedDescription || exactProduct.description}
+        - Mô tả chi tiết (Tóm tắt): ${exactProduct.description}
+        - Mô tả chi tiết (Đầy đủ): ${exactProduct.detailedDescription || "Không có mô tả chi tiết."}
         - Danh mục: ${exactProduct.category}
       `;
       systemInstruction = `
@@ -52,23 +51,35 @@ export const handleChat = async (req, res) => {
           { title: { $regex: searchRegex } },
           { description: { $regex: searchRegex } },
           { category: { $regex: searchRegex } },
+          { type: { $regex: searchRegex } },
         ],
       }).limit(3);
 
       if (relevantProducts.length > 0) {
         productContext = `
           DỮ LIỆU GỢI Ý TỪ KHO:
-          ${relevantProducts.map(p => `- Tên: ${p.title}, Giá: ${p.price} VNĐ, Mô tả: ${p.description}`).join("\n")}
+          ${relevantProducts.map(p => {
+          let priceString = "";
+          if (typeof p.price === "object" && p.price !== null) {
+            priceString = Object.entries(p.price)
+              .map(([size, value]) => `- ${size}: ${value} VNĐ`)
+              .join("\n\n");
+          } else {
+            priceString = p.price ? `- ${p.price} VNĐ` : "- Liên hệ";
+          }
+
+          return `**${p.title}**\n\n${priceString}\n\n*${p.description || "Không có mô tả."}*`;
+        }).join("\n\n")}
         `;
-        // LƯU Ý: Ở dòng trên tôi dùng 'p' làm tên biến đại diện, không phải 'product'
-        
+
         systemInstruction = `
           Bạn là trợ lý ảo HUSTique Beauty.
           Dựa vào DỮ LIỆU GỢI Ý để tư vấn cho khách.
-          Ưu tiên giới thiệu các sản phẩm có trong danh sách.
+          Ưu tiên giới thiệu các sản phẩm có trong danh sách và sử dụng thông tin chi tiết (như mô tả, thành phần) để trả lời.
+          **HÃY TUYỆT ĐỐI ƯU TIÊN GIỚI THIỆU SẢN PHẨM CÓ DANH MỤC HOẶC MÔ TẢ PHÙ HỢP CHUYÊN BIỆT NHẤT VỚI CÂU HỎI CỦA KHÁCH HÀNG (Ví dụ: Sản phẩm thuộc Danh mục "Chăm sóc môi" cho câu hỏi về môi khô).**
+          Hãy chọn lọc và giới thiệu tối đa 3 sản phẩm liên quan.
         `;
       } else {
-        // Không tìm thấy gì
         productContext = "";
         systemInstruction = `
           Bạn là trợ lý HUSTique Beauty.
@@ -91,17 +102,17 @@ export const handleChat = async (req, res) => {
 
     // Chuẩn bị lịch sử để gửi đi
     const chatHistory = Array.isArray(history) ? history : [];
-    
+
     // Gộp lịch sử cũ + câu hỏi mới (kèm context)
     const fullConversation = [
-        ...chatHistory,
-        { role: "user", parts: [{ text: currentTurnPrompt }] }
+      ...chatHistory,
+      { role: "user", parts: [{ text: currentTurnPrompt }] }
     ];
 
     const result = await model.generateContent({
-        contents: fullConversation
+      contents: fullConversation
     });
-    
+
     const response = await result.response;
     const text = response.text();
 
@@ -109,7 +120,6 @@ export const handleChat = async (req, res) => {
 
   } catch (error) {
     console.error("Lỗi server:", error);
-    // Trả về lỗi chi tiết hơn một chút để dễ debug nếu cần (chỉ trong môi trường dev)
     res.status(500).json({ message: "Lỗi xử lý từ phía server.", error: error.message });
   }
 };

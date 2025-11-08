@@ -23,7 +23,7 @@ const EditProductModal = ({ product, onClose, onUpdated }) => {
     const [newImages, setNewImages] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const allCategories = ["Chăm sóc tóc", "Chăm sóc cơ thể", "Chăm sóc da mặt"];
+    const allCategories = ["Chăm sóc tóc", "Chăm sóc cơ thể", "Chăm sóc da mặt", "Chăm sóc môi"];
     const allTypes = [
         "Dầu gội",
         "Sữa tắm",
