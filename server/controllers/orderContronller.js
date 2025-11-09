@@ -158,15 +158,13 @@ export const placeOrderStripe = async (req, res) => {
       return res.json({ success: false, message: "Vui lòng thêm sản phẩm trước" });
     }
 
-    const exchangeRes = await fetch("https://open.er-api.com/v6/latest/USD");
-    const exchangeData = await exchangeRes.json();
-    const vndPerUsd = exchangeData.rates.VND; 
-    const usdPerVnd = 1 / vndPerUsd; 
+    // Tỷ giá cố định
+    const vndPerUsd = 27361.1920;
+    const usdPerVnd = 1 / vndPerUsd;
 
     let subtotalVND = 0;
-    let productData = [];
 
-    // Tính tổng phụ và tạo dữ liệu sản phẩm
+    // Tính tổng phụ
     for (const item of items) {
       const product = await Product.findById(item.product);
       if (!product) {
@@ -179,19 +177,13 @@ export const placeOrderStripe = async (req, res) => {
       }
 
       subtotalVND += unitPriceVND * item.quantity;
-
-      productData.push({
-        name: product.title,
-        priceVND: unitPriceVND,
-        quantity: item.quantity,
-      });
     }
 
-    //Tính tổng (bao gồm thuế + phí ship)
+    // Tính thuế và tổng tiền
     const taxAmountVND = subtotalVND * taxPercentage;
     const totalAmountVND = subtotalVND + taxAmountVND + delivery_charges_vnd;
 
-    //Lưu đơn hàng ở VND
+    // Lưu đơn hàng ở VND
     const order = await Order.create({
       userId,
       items,
@@ -200,36 +192,21 @@ export const placeOrderStripe = async (req, res) => {
       paymentMethod: "stripe",
     });
 
-    //Chuẩn bị gửi sang Stripe (đổi sang USD)
+    // Chuyển tổng tiền sang USD (cent)
+    const totalAmountUSD = Math.round(totalAmountVND * usdPerVnd * 100);
+
+    // Tạo 1 line item tổng
     const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
-    let line_items = productData.map((item) => ({
-      price_data: {
-        currency,
-        product_data: { name: item.name },
-        unit_amount: Math.round(item.priceVND * usdPerVnd * 100), // đổi sang cent USD
-      },
-      quantity: item.quantity,
-    }));
-
-    // Thêm thuế
-    line_items.push({
-      price_data: {
-        currency,
-        product_data: { name: "Tax (2%)" },
-        unit_amount: Math.round(taxAmountVND * usdPerVnd * 100),
-      },
-      quantity: 1,
-    });
-
-    // Thêm phí vận chuyển
-    line_items.push({
-      price_data: {
-        currency,
-        product_data: { name: "Delivery Charges" },
-        unit_amount: Math.round(delivery_charges_vnd * usdPerVnd * 100),
-      },
-      quantity: 1,
-    });
+    const line_items = [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: { name: `Đơn hàng #${order._id}` },
+          unit_amount: totalAmountUSD, // cent
+        },
+        quantity: 1,
+      }
+    ];
 
     // Tạo session thanh toán Stripe
     const session = await stripeInstance.checkout.sessions.create({
