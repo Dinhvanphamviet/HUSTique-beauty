@@ -25,11 +25,11 @@ const EditProductModal = ({ product, onClose, onUpdated }) => {
 
     const allCategories = ["Chăm sóc tóc", "Chăm sóc cơ thể", "Chăm sóc da mặt", "Chăm sóc môi"];
     const allTypes = [
-        "Dầu gội",
+        "Dầu gội", "Dầu dưỡng", "Dầu xả",
         "Sữa tắm",
         "Sữa rửa mặt",
-        "Kem dưỡng ẩm",
-        "Mặt nạ",
+        "Kem dưỡng", "Kem chân", "Kem mắt", "Kem tay",
+        "Mặt nạ", "Nước hoa", "Son dưỡng", "Sữa tắm", "Tẩy trang",
         "Serum",
         "Xịt khoáng",
     ];
