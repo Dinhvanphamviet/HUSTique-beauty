@@ -3,6 +3,7 @@ import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
 import Stripe from "stripe";
+import fetch from "node-fetch";
 
 // Global variables for payment
 const currency = "usd"
@@ -144,114 +145,111 @@ export const placeOrderCOD = async (req, res) => {
     }
 }
 
+const delivery_charges_vnd = 20000; // 20,000 VND 
 
-//Place order using Stripe [POST '/stripe']
-
+// Place Order using Stripe [POST '/stripe']
 export const placeOrderStripe = async (req, res) => {
-    try {
-        const { items, address } = req.body
-        const { userId } = req.auth()
-        const { origin } = req.headers
+  try {
+    const { items, address } = req.body;
+    const { userId } = req.auth();
+    const { origin } = req.headers;
 
-
-        if (!items || items.length === 0) {
-            return res.json({ success: false, message: "Vui lòng thêm sản phẩm trước" })
-        }
-
-
-        let subtotal = 0
-        let productData = []
-
-        // calculate subtotal and prepare productData
-
-        for (const item of items) {
-            const product = await Product.findById(item.product);
-            if (!product) {
-                return res.json({ success: false, message: "Không tìm thấy sản phẩm" })
-            }
-
-            const unitPrice = product.price[item.size] //pick correct size price
-            if (!unitPrice) {
-                return res.json({ success: false, message: "Dung tích bạn chọn không hợp lệ" })
-            }
-
-            subtotal += unitPrice * item.quantity
-
-            productData.push({
-                name: product.title, //Ensure this matches the products schema
-                price: unitPrice,
-                quantity: item.quantity,
-            })
-        }
-
-        //caltulate total amount by adding delivery charges and tax
-
-        const taxAmount = subtotal * taxPercentage
-        const totalAmount = subtotal + taxAmount + delivery_charges
-
-        const order = await Order.create({
-            userId,
-            items,
-            amount: totalAmount,
-            address,
-            paymentMethod: "stripe",
-        })
-
-        const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
-
-        let line_items = productData.map(((item) => ({
-            price_data: {
-                currency: currency,
-                product_data: {
-                    name: item.name, //use name to match productData
-                },
-                unit_amount: Math.round(item.price * 100),
-            },
-            quantity: item.quantity,
-        })))
-
-
-        //Tax
-        line_items.push({
-            price_data: {
-                currency,
-                product_data: { name: "Tax (2%)" },
-                unit_amount: Math.round(taxAmount * 100),
-            },
-            quantity: 1,
-        })
-
-        //Delivery charges
-        line_items.push({
-            price_data: {
-                currency,
-                product_data: { name: "Delivery Charges" },
-                unit_amount: Math.round(delivery_charges * 100),
-            },
-            quantity: 1,
-        })
-
-
-        // Create Stripe checkout session
-        const session = await stripeInstance.checkout.sessions.create({
-            line_items,
-            mode: "payment",
-            success_url: `${origin}/processing/my-orders`,
-            cancel_url: `${origin}/cart`,
-            metadata: {
-                orderId: order._id.toString(),
-                userId,
-            }
-        })
-
-        return res.json({ success: true, url: session.url })
-
-    } catch (error) {
-        console.log("Stripe Error:", error.message)
-        res.json({success: false, message: error.message})
-
+    if (!items || items.length === 0) {
+      return res.json({ success: false, message: "Vui lòng thêm sản phẩm trước" });
     }
-}
+
+    const exchangeRes = await fetch("https://open.er-api.com/v6/latest/USD");
+    const exchangeData = await exchangeRes.json();
+    const vndPerUsd = exchangeData.rates.VND; 
+    const usdPerVnd = 1 / vndPerUsd; 
+
+    let subtotalVND = 0;
+    let productData = [];
+
+    // Tính tổng phụ và tạo dữ liệu sản phẩm
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+      if (!product) {
+        return res.json({ success: false, message: "Không tìm thấy sản phẩm" });
+      }
+
+      const unitPriceVND = product.price[item.size];
+      if (!unitPriceVND) {
+        return res.json({ success: false, message: "Dung tích bạn chọn không hợp lệ" });
+      }
+
+      subtotalVND += unitPriceVND * item.quantity;
+
+      productData.push({
+        name: product.title,
+        priceVND: unitPriceVND,
+        quantity: item.quantity,
+      });
+    }
+
+    //Tính tổng (bao gồm thuế + phí ship)
+    const taxAmountVND = subtotalVND * taxPercentage;
+    const totalAmountVND = subtotalVND + taxAmountVND + delivery_charges_vnd;
+
+    //Lưu đơn hàng ở VND
+    const order = await Order.create({
+      userId,
+      items,
+      amount: totalAmountVND,
+      address,
+      paymentMethod: "stripe",
+    });
+
+    //Chuẩn bị gửi sang Stripe (đổi sang USD)
+    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
+    let line_items = productData.map((item) => ({
+      price_data: {
+        currency,
+        product_data: { name: item.name },
+        unit_amount: Math.round(item.priceVND * usdPerVnd * 100), // đổi sang cent USD
+      },
+      quantity: item.quantity,
+    }));
+
+    // Thêm thuế
+    line_items.push({
+      price_data: {
+        currency,
+        product_data: { name: "Tax (2%)" },
+        unit_amount: Math.round(taxAmountVND * usdPerVnd * 100),
+      },
+      quantity: 1,
+    });
+
+    // Thêm phí vận chuyển
+    line_items.push({
+      price_data: {
+        currency,
+        product_data: { name: "Delivery Charges" },
+        unit_amount: Math.round(delivery_charges_vnd * usdPerVnd * 100),
+      },
+      quantity: 1,
+    });
+
+    // Tạo session thanh toán Stripe
+    const session = await stripeInstance.checkout.sessions.create({
+      line_items,
+      mode: "payment",
+      success_url: `${origin}/processing/my-orders`,
+      cancel_url: `${origin}/cart`,
+      metadata: {
+        orderId: order._id.toString(),
+        userId,
+      },
+    });
+
+    return res.json({ success: true, url: session.url });
+  } catch (error) {
+    console.log("Stripe Error:", error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 
 
 //All Orders data of user
